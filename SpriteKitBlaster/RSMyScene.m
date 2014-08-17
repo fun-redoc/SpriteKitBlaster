@@ -7,6 +7,7 @@
 //
 
 #import "RSMyScene.h"
+#import "RSGameEntity.h"
 #include "globaldefs.h"
 
 @interface RSTurningSpriteNode : SKSpriteNode
@@ -18,11 +19,11 @@
 -(void)rotateTowards:(float)angle {
     
     // Did the angle flip from +Pi to -Pi, or -Pi to +Pi?
-    if (self.lastAngle  < -3.0f && angle > 3.0f)
+    if (self.lastAngle  < -M_PI && angle > M_PI)
     {
         self.angle += M_PI * 2.0f;
     }
-    else if (self.lastAngle  > 3.0f && angle < -3.0f)
+    else if (self.lastAngle  > M_PI && angle < -M_PI)
     {
         self.angle -= M_PI * 2.0f;
     }
@@ -65,7 +66,7 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     NSTimeInterval _lastUpdateTime;
     NSTimeInterval _deltaTime;
     
-    State _player;
+    RSGameEntity *_player;
     
 }
 
@@ -78,7 +79,7 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
         _winSize = CGSizeMake(size.width, size.height);
 
         // init world
-        _player.p = CGPointMake(_winSize.width/2, _winSize.height /2 ); //  - 50.0f, 60.0f);
+        _player = [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width/2, _winSize.height /2 )];
         
         // init view
         _playerSprite = [RSTurningSpriteNode spriteNodeWithImageNamed:@"Art/Images/Player"];
@@ -99,12 +100,6 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     _motionManager = nil;
 }
 
-
-//- (void)dealloc
-//{
-//    [self stopMonitoringAcceleration];
-//    _motionManager = nil;
-//}
 
 - (void)startMonitoringAcceleration
 {
@@ -139,69 +134,32 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     [self updatePlayerAccelerationFromMotionManager];
 }
 
--(State)accelerateGameEntity:(State) e withAcceleration:(Vector2d) a dt:(NSTimeInterval) dt {
-    // when the device ist tilded add max accelerattion in the tilt direction
-    // beware, because of the landscape mode tilt y-achses means movement x-axes
-    if (a.y > TILT_DEVICE_ACCELERATION)
-    {
-        e.a.x = -MAX_PLAYER_ACCELERATION;
-    }
-    else if (a.y < -TILT_DEVICE_ACCELERATION)
-    {
-        e.a.x = MAX_PLAYER_ACCELERATION;
-    }
-    if (a.x < -TILT_DEVICE_ACCELERATION)
-    {
-        e.a.y = -MAX_PLAYER_ACCELERATION;
-    }
-    else if (a.x > TILT_DEVICE_ACCELERATION)
-    {
-        e.a.y = MAX_PLAYER_ACCELERATION;
-    }
-    
-    // calculate the new speed (Newton Approximation), und clamp
-    e.v.x += e.a.x * dt;
-    e.v.y += e.a.y * dt;
-    e.v.x = fmaxf(fminf(e.v.x, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
-    e.v.y = fmaxf(fminf(e.v.y, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
-    
-    // calculate the new position in the world
-    e.p.x = e.p.x + e.v.x*dt;
-    e.p.y = e.p.y + e.v.y*dt;
-    
-//    // and clamp
-// replaces by bound collision handling
-//    e.p.x = MIN(_winSize.width, MAX(e.p.y, 0));
-//    e.p.x = MIN(_winSize.height, MAX(e.p.x, 0));
-    
-    
-    return e;
-}
-
--(void)playerCollisionWithBounds {
-    if (_player.p.x < 0.0f) {
-        _player.p.x = 0.0f;
-        _player = fnVerticalCollisionHandler(_player);
-    } else if (_player.p.x > _winSize.width) {
-        _player.p.x = _winSize.width;
-        _player = fnVerticalCollisionHandler(_player);
-    }
-    
-    if (_player.p.y < 0.0f)
-    {
-        _player.p.y = 0.0f;
-        _player = fnHorizontalCollisionHandler(_player);
-    }
-    else if (_player.p.y > _winSize.height)
-    {
-        _player.p.y = _winSize.height;
-        _player = fnHorizontalCollisionHandler(_player);
-    }
-}
-
 -(void)updateWorld:(NSTimeInterval) dt {
-    _player = [self accelerateGameEntity:_player withAcceleration:CGPointMake(_accelerometer.x, _accelerometer.y) dt:dt];
-    [self playerCollisionWithBounds];
+    [_player accelerate:CGPointMake(_accelerometer.x, _accelerometer.y)
+                     dt:dt
+                  block: ^(RSGameEntity *e) {
+                      State s = e.state;
+                      if (s.p.x < 0.0f) {
+                          s.p.x = 0.0f;
+                          s = fnVerticalCollisionHandler(s);
+                      } else if (s.p.x > _winSize.width) {
+                          s.p.x = _winSize.width;
+                          s = fnVerticalCollisionHandler(s);
+                      }
+                      
+                      if (s.p.y < 0.0f)
+                      {
+                          s.p.y = 0.0f;
+                          s = fnHorizontalCollisionHandler(s);
+                      }
+                      else if (s.p.y > _winSize.height)
+                      {
+                          s.p.y = _winSize.height;
+                          s = fnHorizontalCollisionHandler(s);
+                      }
+                      e.state = s;
+                  }];
+//    [self playerCollisionWithBounds];
     
 }
 

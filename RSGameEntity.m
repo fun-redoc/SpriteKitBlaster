@@ -10,7 +10,26 @@
 
 @implementation RSGameEntity
 
--(instancetype)accelerate:(Vector2d) a dt:(NSTimeInterval) dt {
+-(instancetype)initWithPosition:(Vector2d)p {
+    if( self = [super init] ) {
+        State s = self.state;
+        s.p = p;
+        self.state = s;
+    }
+    return self;
+}
+
+-(Vector2d)a {
+    return self.self.a;
+}
+-(Vector2d)v {
+    return self.state.v;
+}
+-(Vector2d)p {
+    return self.state.p;
+}
+
+-(instancetype)accelerate:(Vector2d) a dt:(NSTimeInterval) dt block:(void (^)(RSGameEntity *e)) block {
     // when the device ist tilded add max accelerattion in the tilt direction
     // beware, because of the landscape mode tilt y-achses means movement x-axes
     State newState = self.state;
@@ -32,8 +51,8 @@
     }
     
     // calculate the new speed (Newton Approximation), und clamp
-    newState.v.x += self.state.v.x * dt;
-    newState.v.y += self.state.v.y * dt;
+    newState.v.x += newState.a.x * dt;
+    newState.v.y += newState.a.y * dt;
     newState.v.x = fmaxf(fminf(newState.v.x, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
     newState.v.y = fmaxf(fminf(newState.v.y, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
     
@@ -43,6 +62,7 @@
 
     self.state = newState;
     
+    block(self);
     
     return self;
 }

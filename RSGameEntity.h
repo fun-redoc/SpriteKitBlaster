@@ -11,12 +11,14 @@
 
 @interface RSGameEntity : NSObject
 
-//@property (nonatomic) Vector2d v; // velocity
-//@property (nonatomic) Vector2d a; // acceleration
-//@property (nonatomic) Vector2d p; // position
+@property (nonatomic, readonly) Vector2d v; // velocity
+@property (nonatomic, readonly) Vector2d a; // acceleration
+@property (nonatomic, readonly) Vector2d p; // position
 
 @property (nonatomic) State state;
 
--(instancetype)accelerate:(Vector2d) a dt:(NSTimeInterval) dt;
+-(instancetype)initWithPosition:(Vector2d)p;
+
+-(instancetype)accelerate:(Vector2d) a dt:(NSTimeInterval) dt block:(void (^)(RSGameEntity *e)) block;
 
 @end
