@@ -7,6 +7,7 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+@import CoreMotion;
 
 @interface RSMyScene : SKScene
 

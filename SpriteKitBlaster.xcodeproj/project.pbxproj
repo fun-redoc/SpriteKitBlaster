@@ -25,6 +25,8 @@
 		2A96E9E8199E61D500C4B6B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9C0199E61D500C4B6B3 /* UIKit.framework */; };
 		2A96E9F0199E61D500C4B6B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A96E9EE199E61D500C4B6B3 /* InfoPlist.strings */; };
 		2A96E9F2199E61D500C4B6B3 /* SpriteKitBlasterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A96E9F1199E61D500C4B6B3 /* SpriteKitBlasterTests.m */; };
+		2A96E9FC199EBE9000C4B6B3 /* Art in Resources */ = {isa = PBXBuildFile; fileRef = 2A96E9FB199EBE9000C4B6B3 /* Art */; };
+		2A96E9FF19A14DBC00C4B6B3 /* RSGameEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A96E9FE19A14DBC00C4B6B3 /* RSGameEntity.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,10 @@
 		2A96E9ED199E61D500C4B6B3 /* SpriteKitBlasterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpriteKitBlasterTests-Info.plist"; sourceTree = "<group>"; };
 		2A96E9EF199E61D500C4B6B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A96E9F1199E61D500C4B6B3 /* SpriteKitBlasterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteKitBlasterTests.m; sourceTree = "<group>"; };
+		2A96E9FB199EBE9000C4B6B3 /* Art */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Art; sourceTree = "<group>"; };
+		2A96E9FD19A14DBC00C4B6B3 /* RSGameEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSGameEntity.h; path = ../RSGameEntity.h; sourceTree = "<group>"; };
+		2A96E9FE19A14DBC00C4B6B3 /* RSGameEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSGameEntity.m; path = ../RSGameEntity.m; sourceTree = "<group>"; };
+		2A96EA0019A14E1200C4B6B3 /* globaldefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = globaldefs.h; path = ../globaldefs.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +129,9 @@
 		2A96E9C4199E61D500C4B6B3 /* SpriteKitBlaster */ = {
 			isa = PBXGroup;
 			children = (
+				2A96EA0019A14E1200C4B6B3 /* globaldefs.h */,
+				2A96E9FD19A14DBC00C4B6B3 /* RSGameEntity.h */,
+				2A96E9FE19A14DBC00C4B6B3 /* RSGameEntity.m */,
 				2A96E9CD199E61D500C4B6B3 /* RSAppDelegate.h */,
 				2A96E9CE199E61D500C4B6B3 /* RSAppDelegate.m */,
 				2A96E9D0199E61D500C4B6B3 /* Main_iPhone.storyboard */,
@@ -133,6 +142,7 @@
 				2A96E9DA199E61D500C4B6B3 /* RSMyScene.m */,
 				2A96E9DC199E61D500C4B6B3 /* Spaceship.png */,
 				2A96E9DE199E61D500C4B6B3 /* Images.xcassets */,
+				2A96E9FB199EBE9000C4B6B3 /* Art */,
 				2A96E9C5199E61D500C4B6B3 /* Supporting Files */,
 			);
 			path = SpriteKitBlaster;
@@ -244,6 +254,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A96E9FC199EBE9000C4B6B3 /* Art in Resources */,
 				2A96E9DD199E61D500C4B6B3 /* Spaceship.png in Resources */,
 				2A96E9DF199E61D500C4B6B3 /* Images.xcassets in Resources */,
 				2A96E9D5199E61D500C4B6B3 /* Main_iPad.storyboard in Resources */,
@@ -268,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A96E9CB199E61D500C4B6B3 /* main.m in Sources */,
+				2A96E9FF19A14DBC00C4B6B3 /* RSGameEntity.m in Sources */,
 				2A96E9CF199E61D500C4B6B3 /* RSAppDelegate.m in Sources */,
 				2A96E9D8199E61D500C4B6B3 /* RSViewController.m in Sources */,
 				2A96E9DB199E61D500C4B6B3 /* RSMyScene.m in Sources */,
@@ -410,6 +422,7 @@
 				INFOPLIST_FILE = "SpriteKitBlaster/SpriteKitBlaster-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -424,6 +437,7 @@
 				INFOPLIST_FILE = "SpriteKitBlaster/SpriteKitBlaster-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
