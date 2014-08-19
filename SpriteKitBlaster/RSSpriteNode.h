@@ -11,7 +11,6 @@
 #include "globaldefs.h"
 
 @interface RSSpriteNode : SKSpriteNode<RSGameEntityProtocol>
-@property (strong, nonatomic) RSGameEntity *entity;
-//@property (nonatomic, readonly) Vector2d acceleration;
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *) entity;
++(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andUpdateFunction:(void (^)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt)) block;
+@property (nonatomic, weak) void (^fnUpdate)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt);
 @end

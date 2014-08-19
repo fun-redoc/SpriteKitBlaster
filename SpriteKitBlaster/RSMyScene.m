@@ -35,59 +35,10 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     return e;
 };
 
-
-@interface RSTurretSprite : RSSpriteNode
-@property (strong, nonatomic) Vector2d (^pointToVector)();
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(id<RSGameEntityProtocol>)entity pointToVectorBlock:(Vector2d (^)(State state)) block;
-
-@end
-@implementation RSTurretSprite
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(id<RSGameEntityProtocol>)entity pointToVectorBlock:(Vector2d (^)(State state)) block {
-    RSTurretSprite *inst = [RSTurretSprite spriteNodeWithImageNamed:imageName];
-    inst.entity = entity;
-    inst.pointToVector = block;
-    return inst;
-}
-
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
-    [super updateWithInput:input dt:dt];
-    Vector2d v = self.pointToVector(self.entity.state);
-    float angle = atan2f(v.y, v.x);
-    
-    // damping!
-    const float RotationBlendFactor = 0.05f;
-    float newRotationAngle = NORMALIZE_ANGLE(angle);
-    float dampedNewRotationAngle = newRotationAngle*RotationBlendFactor + self.zRotation*(1.0f - RotationBlendFactor);
-    self.zRotation = dampedNewRotationAngle;
-    
-    return self;
-}
-
-
-@end
-
-@interface RSPlayerEntity : RSGameEntity
-@property (strong, nonatomic) void (^handleBoundsCollisionBlock) (RSGameEntity *e);
--(instancetype)initWithPosition:(Vector2d)p andBoundsCollisionBlock:(void (^)(RSGameEntity *e)) block;
-//-(instancetype)accelerate:(Vector2d) a dt:(NSTimeInterval) dt block:(void (^)(RSGameEntity *e)) block;
-@end
-@implementation RSPlayerEntity
-
--(instancetype)initWithPosition:(Vector2d)p andBoundsCollisionBlock:(void (^)(RSGameEntity *e)) block {
-    if( self = [super initWithPosition:p] ) {
-        self.handleBoundsCollisionBlock = block;
-    }
-    return self;
-}
-
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
-    return [[super updateWithInput:input dt:dt] accelerate:input.acceleration dt:dt block:self.handleBoundsCollisionBlock];
-}
-
--(instancetype)accelerate:(Vector2d) a dt:(NSTimeInterval) dt block:(void (^)(RSGameEntity *e)) block {
+State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     // when the device ist tilded add max accelerattion in the tilt direction
     // beware, because of the landscape mode tilt y-achses means movement x-axes
-    State newS = self.state;
+    State newS = state;
     Vector2d newA = newS.a;
     if (a.y > TILT_DEVICE_ACCELERATION)
     {
@@ -121,41 +72,23 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     newP.y = newS.p.y + newS.v.y*dt;
     newS.p = newP;
     
-    self.state = newS;
-    
-    // handle collison with bounds
-    
-    block(self);
-    
-    return self;
+    return newS;
 }
 
+@interface RSTurretEntity : RSGameEntity
+@property (nonatomic) Vector2d shootVector;
 @end
-
+@implementation RSTurretEntity
+@end
 
 
 @interface RSPlayerSpriteNode : RSSpriteNode
 @property (nonatomic) float angle;
 @property (nonatomic) float lastAngle;
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt;
+-(void)rotateTowards:(float)angle;
 @end
-@implementation RSPlayerSpriteNode
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(id<RSGameEntityProtocol>)entity {
-    RSPlayerSpriteNode *inst = [RSPlayerSpriteNode spriteNodeWithImageNamed:imageName];
-    inst.entity = entity;
-    return inst;
-}
 
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
-    [super updateWithInput:input dt:dt];
-    Vector2d v = self.entity.state.v;
-    float speedSquare = v.x*v.x + v.y*v.y;
-    if (speedSquare > MIN_SPEED_TO_BE_ABLE_TO_TURN * MIN_SPEED_TO_BE_ABLE_TO_TURN ) {
-        float angle = atan2f(v.y, v.x);
-        [self rotateTowards:angle];
-    }
-    return self;
-}
+@implementation RSPlayerSpriteNode
 -(void)rotateTowards:(float)angle {
     
     // Did the angle flip from +Pi to -Pi, or -Pi to +Pi?
@@ -188,8 +121,11 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     NSTimeInterval _deltaTime;
     
     NSMutableArray *_sprites;
+    NSMutableArray *_entities;
     
     RSPlayerSpriteNode *_playerSprite;
+    RSGameEntity *_playerEntity;
+    RSTurretEntity *_turretEntity;
 
     
 }
@@ -217,13 +153,11 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
         _winSize = CGSizeMake(size.width, size.height);
 
         // init world
-        // TODO
-        
-        // init view
-        _sprites = @[
-                     _playerSprite = [RSPlayerSpriteNode spriteNodeWithImageNamed:@"Art/Images/Player"
-                                                        andEntity:[[RSPlayerEntity alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f ) andBoundsCollisionBlock:^(RSGameEntity *e) {
-                                                                             State s = e.state;
+        _entities = @[
+                      _playerEntity = [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
+                                                             andUpdateFunction:^(RSGameEntity * entity, RSGameInput *input, NSTimeInterval dt) {
+                                                                             State s = accelerate(entity.state, input.acceleration, dt);
+                                                                             // clamp movement inside the bounds of screen
                                                                              if (s.p.x < 0.0f) {
                                                                                  s.p.x = 0.0f;
                                                                                  s = fnVerticalCollisionHandler(s);
@@ -231,7 +165,7 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
                                                                                  s.p.x = _winSize.width;
                                                                                  s = fnVerticalCollisionHandler(s);
                                                                              }
-                                                                             
+
                                                                              if (s.p.y < 0.0f)
                                                                              {
                                                                                  s.p.y = 0.0f;
@@ -242,18 +176,57 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
                                                                                  s.p.y = _winSize.height;
                                                                                  s = fnHorizontalCollisionHandler(s);
                                                                              }
-                                                                             e.state = s;
-                                                                         }]],
+                                                                             entity.state = s;
+                                                           }],
+                                      [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
+                                                           andUpdateFunction:NULL],
+                      _turretEntity = [[RSTurretEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
+                                                           andUpdateFunction:^(RSGameEntity * me, RSGameInput *intput, NSTimeInterval dt) {
+                                                               RSTurretEntity *turret = (RSTurretEntity *)me;
+                                                               turret.shootVector = CGPointMake(_playerEntity.state.p.x - turret.state.p.x,
+                                                                                                _playerEntity.state.p.y - turret.state.p.y);
+                                                           }]
+                      ].mutableCopy;
+        
+        // init view
+        RSSpriteNode *cannon;
+        RSSpriteNode *turret;
+        _sprites = @[
+                     _playerSprite = [RSPlayerSpriteNode spriteNodeWithImageNamed:@"Art/Images/Player"
+                                                          andUpdateFunction:^(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt) {
+                                                              RSPlayerSpriteNode *mySprite = (RSPlayerSpriteNode *)sprite;
+                                                              mySprite.position = _playerEntity.state.p  ;
+                                                              
+                                                              Vector2d v = _playerEntity.state.v;
+                                                              
+                                                              float speedSquare = v.x*v.x + v.y*v.y;
+                                                              if (speedSquare > MIN_SPEED_TO_BE_ABLE_TO_TURN * MIN_SPEED_TO_BE_ABLE_TO_TURN ) {
+                                                               
+                                                                  float angle = atan2f(v.y, v.x);
+                                                                  
+                                                                  [mySprite rotateTowards:angle];
+                                                              }
+                                                              
+                                                          }],
                      
-                     [RSSpriteNode spriteNodeWithImageNamed:@"Art/Images/Cannon" andEntity:[[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )]],
-                     [RSTurretSprite spriteNodeWithImageNamed:@"Art/Images/Turret" andEntity:[[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )]
-                                           pointToVectorBlock:^(State state) {
-                                               return CGPointMake(_playerSprite.entity.state.p.x - state.p.x,
-                                                                  _playerSprite.entity.state.p.y - state.p.y);
-                                           }]
-                     
+                     cannon = [RSSpriteNode spriteNodeWithImageNamed:@"Art/Images/Cannon" andUpdateFunction:NULL],
+                     turret = [RSSpriteNode spriteNodeWithImageNamed:@"Art/Images/Turret"
+                                          andUpdateFunction:^(RSSpriteNode *me, RSGameInput *input, NSTimeInterval dt) {
+                                              Vector2d v = _turretEntity.state.v;
+                                              float angle = atan2f(v.y, v.x);
+                                              
+                                              // damping!
+                                              const float RotationBlendFactor = 0.05f;
+                                              float newRotationAngle = NORMALIZE_ANGLE(angle);
+                                              float dampedNewRotationAngle = newRotationAngle*RotationBlendFactor + me.zRotation*(1.0f - RotationBlendFactor);
+                                              me.zRotation = dampedNewRotationAngle;
+                                        }]
                      
                     ].mutableCopy;
+        
+        cannon.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
+        turret.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
+        
         for (SKNode *sprite in _sprites) {
             [self addChild:sprite];
         }
@@ -314,7 +287,15 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
     _lastUpdateTime = currentTime;
     
     
+    // transform input into world events
     RSGameInput *input= [RSGameInput GameInputWithAcceleration:self.acceleration];
+    
+    // update world
+    for (id<RSGameEntityProtocol> entity in _entities) {
+        [entity updateWithInput:input dt:_deltaTime];
+    }
+    
+    // update view
     for (id<RSGameEntityProtocol> sprite in _sprites) {
         [sprite updateWithInput:input dt:_deltaTime];
     }

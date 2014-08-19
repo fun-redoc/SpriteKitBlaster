@@ -13,6 +13,7 @@
 
 @interface RSGameEntity : NSObject<RSGameEntityProtocol>
 @property (nonatomic) State state; // position
+@property (nonatomic, weak) void (^fnUpdate)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt);
 
--(instancetype)initWithPosition:(Vector2d)p;
+-(instancetype)initWithPosition:(Vector2d)p andUpdateFunction:(void (^)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt)) block;
 @end

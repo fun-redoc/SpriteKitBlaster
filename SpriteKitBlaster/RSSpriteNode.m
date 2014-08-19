@@ -10,17 +10,16 @@
 
 
 @implementation RSSpriteNode
+@synthesize fnUpdate = _fnUpdate;
 
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *)entity {
++(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andUpdateFunction:(void (^)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt)) block {
     RSSpriteNode *inst = [RSSpriteNode spriteNodeWithImageNamed:imageName];
-    inst.entity = entity;
+    inst.fnUpdate = block;
     return inst;
 }
 
 -(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
-    NSAssert(self.entity != NULL, @"Programming Error: property entity must not be NULL");
-    [self.entity updateWithInput:input dt:dt];
-    self.position = self.entity.state.p;
+    if(_fnUpdate) _fnUpdate(self, input,dt);
     return self;
 }
 
