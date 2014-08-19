@@ -2,8 +2,8 @@
 //  RSGameEntity.h
 //  SpriteKitBlaster
 //
-//  Created by Roland Stellmach on 17.08.14.
-//  Copyright (c) 2014 Roland Stellmach. All rights reserved.
+//  Created by Fun Redoc on 17.08.14.
+//  Copyright (c) 2014 Fun Redoc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
