@@ -1,0 +1,7 @@
+Build after the idea from http://www.raywenderlich.com/57368/trigonometry-game-programming-sprite-kit-version-part-1
+as starter learning spritekit
+
+Taken:
+- images
+- some algotithmic ideas (smoothing the movement)
+

@@ -7,7 +7,6 @@
 //
 
 #import "RSMyScene.h"
-#import "RSGameEntityProtocol.h"
 #import "RSGameInput.h"
 #import "RSSpriteNode.h"
 #import "RSGameEntity.h"
@@ -123,11 +122,6 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     NSMutableArray *_sprites;
     NSMutableArray *_entities;
     
-    RSPlayerSpriteNode *_playerSprite;
-    RSGameEntity *_playerEntity;
-    RSTurretEntity *_turretEntity;
-
-    
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -153,8 +147,10 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
         _winSize = CGSizeMake(size.width, size.height);
 
         // init world
+        __block RSGameEntity *playerEntity;
+        __block RSTurretEntity *turretEntity;
         _entities = @[
-                      _playerEntity = [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
+                      playerEntity = [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
                                                              andUpdateFunction:^(RSGameEntity * entity, RSGameInput *input, NSTimeInterval dt) {
                                                                              State s = accelerate(entity.state, input.acceleration, dt);
                                                                              // clamp movement inside the bounds of screen
@@ -180,24 +176,25 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                                            }],
                                       [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:NULL],
-                      _turretEntity = [[RSTurretEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
+                        turretEntity =[[RSTurretEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:^(RSGameEntity * me, RSGameInput *intput, NSTimeInterval dt) {
                                                                RSTurretEntity *turret = (RSTurretEntity *)me;
-                                                               turret.shootVector = CGPointMake(_playerEntity.state.p.x - turret.state.p.x,
-                                                                                                _playerEntity.state.p.y - turret.state.p.y);
+                                                               turret.shootVector = CGPointMake(playerEntity.state.p.x - turret.state.p.x,
+                                                                                                playerEntity.state.p.y - turret.state.p.y);
                                                            }]
                       ].mutableCopy;
         
         // init view
+        __block RSPlayerSpriteNode *player;
         RSSpriteNode *cannon;
         RSSpriteNode *turret;
         _sprites = @[
-                     _playerSprite = [RSPlayerSpriteNode spriteNodeWithImageNamed:@"Art/Images/Player"
+                     player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player"
                                                           andUpdateFunction:^(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt) {
                                                               RSPlayerSpriteNode *mySprite = (RSPlayerSpriteNode *)sprite;
-                                                              mySprite.position = _playerEntity.state.p  ;
+                                                              mySprite.position = playerEntity.state.p  ;
                                                               
-                                                              Vector2d v = _playerEntity.state.v;
+                                                              Vector2d v = playerEntity.state.v;
                                                               
                                                               float speedSquare = v.x*v.x + v.y*v.y;
                                                               if (speedSquare > MIN_SPEED_TO_BE_ABLE_TO_TURN * MIN_SPEED_TO_BE_ABLE_TO_TURN ) {
@@ -209,10 +206,10 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                                               
                                                           }],
                      
-                     cannon = [RSSpriteNode spriteNodeWithImageNamed:@"Art/Images/Cannon" andUpdateFunction:NULL],
-                     turret = [RSSpriteNode spriteNodeWithImageNamed:@"Art/Images/Turret"
+                     cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon" andUpdateFunction:NULL],
+                     turret = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret"
                                           andUpdateFunction:^(RSSpriteNode *me, RSGameInput *input, NSTimeInterval dt) {
-                                              Vector2d v = _turretEntity.state.v;
+                                              Vector2d v = turretEntity.shootVector;
                                               float angle = atan2f(v.y, v.x);
                                               
                                               // damping!
@@ -223,6 +220,7 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                         }]
                      
                     ].mutableCopy;
+        
         
         cannon.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
         turret.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
@@ -291,12 +289,12 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     RSGameInput *input= [RSGameInput GameInputWithAcceleration:self.acceleration];
     
     // update world
-    for (id<RSGameEntityProtocol> entity in _entities) {
+    for (RSGameEntity *entity in _entities) {
         [entity updateWithInput:input dt:_deltaTime];
     }
     
     // update view
-    for (id<RSGameEntityProtocol> sprite in _sprites) {
+    for (RSSpriteNode *sprite in _sprites) {
         [sprite updateWithInput:input dt:_deltaTime];
     }
 

@@ -12,6 +12,7 @@
 		2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6519A22A09004A59D7 /* RSSpriteNode.m */; };
 		2A865B6919A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6819A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m */; };
 		2A865B6C19A35628004A59D7 /* RSGameEntityWithHealth.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6B19A35628004A59D7 /* RSGameEntityWithHealth.m */; };
+		2A865B6E19A38B8F004A59D7 /* acknowledgement.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */; };
 		2A96E9BD199E61D500C4B6B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BC199E61D500C4B6B3 /* Foundation.framework */; };
 		2A96E9BF199E61D500C4B6B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */; };
 		2A96E9C1199E61D500C4B6B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9C0199E61D500C4B6B3 /* UIKit.framework */; };
@@ -46,7 +47,6 @@
 /* Begin PBXFileReference section */
 		2A865B5A19A21F61004A59D7 /* RSGameInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameInput.h; sourceTree = "<group>"; };
 		2A865B5B19A21F61004A59D7 /* RSGameInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameInput.m; sourceTree = "<group>"; };
-		2A865B5F19A22234004A59D7 /* RSGameEntityProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSGameEntityProtocol.h; sourceTree = "<group>"; };
 		2A865B6019A2225B004A59D7 /* globaldefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = globaldefs.h; sourceTree = "<group>"; };
 		2A865B6119A2225B004A59D7 /* RSGameEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameEntity.h; sourceTree = "<group>"; };
 		2A865B6219A2225B004A59D7 /* RSGameEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameEntity.m; sourceTree = "<group>"; };
@@ -56,6 +56,7 @@
 		2A865B6819A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSpriteNodeWithHealthBar.m; sourceTree = "<group>"; };
 		2A865B6A19A35628004A59D7 /* RSGameEntityWithHealth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameEntityWithHealth.h; sourceTree = "<group>"; };
 		2A865B6B19A35628004A59D7 /* RSGameEntityWithHealth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameEntityWithHealth.m; sourceTree = "<group>"; };
+		2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = acknowledgement.txt; sourceTree = "<group>"; };
 		2A96E9B9199E61D500C4B6B3 /* SpriteKitBlaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitBlaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A96E9BC199E61D500C4B6B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -142,8 +143,8 @@
 		2A96E9C4199E61D500C4B6B3 /* SpriteKitBlaster */ = {
 			isa = PBXGroup;
 			children = (
+				2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */,
 				2A865B6019A2225B004A59D7 /* globaldefs.h */,
-				2A865B5F19A22234004A59D7 /* RSGameEntityProtocol.h */,
 				2A865B5A19A21F61004A59D7 /* RSGameInput.h */,
 				2A865B5B19A21F61004A59D7 /* RSGameInput.m */,
 				2A865B6119A2225B004A59D7 /* RSGameEntity.h */,
@@ -282,6 +283,7 @@
 				2A96E9D5199E61D500C4B6B3 /* Main_iPad.storyboard in Resources */,
 				2A96E9D2199E61D500C4B6B3 /* Main_iPhone.storyboard in Resources */,
 				2A96E9C9199E61D500C4B6B3 /* InfoPlist.strings in Resources */,
+				2A865B6E19A38B8F004A59D7 /* acknowledgement.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

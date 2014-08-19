@@ -18,12 +18,6 @@ const float HealthBarHeight = 4.0f;
     SKNode *_healthBar;
 }
 
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(RSGameEntityWithHealth *)entity {
-    RSSpriteNodeWithHealthBar *inst = [RSSpriteNodeWithHealthBar spriteNodeWithImageNamed:imageName];
-    inst.entity = entity;
-    return inst;
-}
-
 -(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
     [super updateWithInput:input dt:dt];
     

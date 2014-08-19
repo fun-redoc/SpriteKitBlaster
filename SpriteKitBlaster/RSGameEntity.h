@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RSGameEntityProtocol.h"
 #import "RSGameInput.h"
 #include "globaldefs.h"
 
-@interface RSGameEntity : NSObject<RSGameEntityProtocol>
+@interface RSGameEntity : NSObject // <RSGameEntityProtocol>
 @property (nonatomic) State state; // position
-@property (nonatomic, weak) void (^fnUpdate)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt);
+@property (nonatomic, strong) void (^fnUpdate)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt);
 
 -(instancetype)initWithPosition:(Vector2d)p andUpdateFunction:(void (^)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt)) block;
+-(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt;
 @end

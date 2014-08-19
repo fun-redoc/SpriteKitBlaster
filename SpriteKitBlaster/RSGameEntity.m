@@ -26,7 +26,10 @@
 -(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
     // delegate update to a function, because update may depend on other world objects, but i dont want the calss depend on the other obects
     // TODO alternativelly try to build a masseg passing mechanism among the objects
-    if(_fnUpdate ) _fnUpdate(self, input, dt);
+    if(self.fnUpdate ) {
+        __block id blockSelf = self;
+      self.fnUpdate(blockSelf, input, dt);
+    }
     return self;
 }
 

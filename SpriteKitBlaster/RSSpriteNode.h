@@ -10,7 +10,8 @@
 #import "RSGameEntity.h"
 #include "globaldefs.h"
 
-@interface RSSpriteNode : SKSpriteNode<RSGameEntityProtocol>
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andUpdateFunction:(void (^)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt)) block;
-@property (nonatomic, weak) void (^fnUpdate)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt);
+@interface RSSpriteNode : SKSpriteNode 
+@property (nonatomic, strong) void (^fnUpdate)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt);
+-(instancetype)initWithImageNamed:(NSString *)imageName andUpdateFunction:(void (^)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt)) block;
+-(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt;
 @end
