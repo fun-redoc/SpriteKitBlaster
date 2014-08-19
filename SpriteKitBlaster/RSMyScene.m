@@ -13,9 +13,9 @@
 #import "RSTurretSpriteNode.h"
 #import "RSGameEntity.h"
 #import "RSTurretEntity.h"
+#import "RSHealthBar.h"
+#import "RSHealthProtocol.h"
 #include "globaldefs.h"
-
-#define MAX_HEALTH_VAL 100
 
 @interface KVCTest : NSObject
 @property (nonatomic) int testInt;
@@ -79,13 +79,14 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     return newS;
 }
 
-@interface RSGameEntityWithHealth : RSGameEntity
-@property (nonatomic) int health;
+@interface RSGameEntityWithHealth : RSGameEntity<RSHealthProtocol>
+//@property (nonatomic) int health;
 @end
 @implementation RSGameEntityWithHealth
+@synthesize health = _health;
 -(instancetype)initWithPosition:(Vector2d)p andUpdateFunction:(void (^)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt)) block;{
     if (self = [super initWithPosition:p andUpdateFunction:block]) {
-        self.health = MAX_HEALTH_VAL;
+        _health = MAX_HEALTH_VAL;
     }
     return self;
 }
@@ -177,7 +178,8 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
         _sprites = @[
                      player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player" andEntity:playerEntity],
                      cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon"],
-                     turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:turretEntity]
+                     turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:turretEntity],
+                     [[RSHealthBar alloc] initEntity:playerEntity andSprite:player]
                     ].mutableCopy;
         
         

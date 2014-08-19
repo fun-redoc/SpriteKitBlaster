@@ -7,26 +7,27 @@
 //
 
 #import "RSHealthBar.h"
+#import "RSSpriteNode.h"
 
-const int MaxHP = 100;
+const int MaxHP = MAX_HEALTH_VAL;
 const float HealthBarWidth = 40.0f;
 const float HealthBarHeight = 4.0f;
 
 
 @implementation RSHealthBar
 
--(instancetype)initWithUpdateFunction:(void (^)(SKNode *sprite, RSGameInput *input, NSTimeInterval dt)) block {
+-(instancetype)initEntity:(RSGameEntity<RSHealthProtocol> *)entity andSprite:(RSSpriteNode *)sprite {
     if (self = [super init]) {
-        self.fnUpdate = block;
+        self.entity = entity;
+        self.sprite = sprite;
     }
     return self;
 }
 
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
-        if(_fnUpdate) {
-            __block id blockSelf = self;
-            _fnUpdate(blockSelf, input, dt);
-        }
+-(instancetype)update {
+    self.position = CGPointMake( self.sprite.position.x - HealthBarWidth/2.0f + 0.5f,
+                                 self.sprite.position.y - self.sprite.size.height/2.0f - 15.0f + 0.5f);
+    [self drawHealthBar:self withName:[self.entity.class description] andHealthPoints:self.entity.health];
         return self;
 }
 

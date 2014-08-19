@@ -64,6 +64,7 @@
 		2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTurretSpriteNode.m; sourceTree = "<group>"; };
 		2A865B7A19A3F513004A59D7 /* RSTurretEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTurretEntity.h; sourceTree = "<group>"; };
 		2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTurretEntity.m; sourceTree = "<group>"; };
+		2A865B7D19A40146004A59D7 /* RSHealthProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSHealthProtocol.h; sourceTree = "<group>"; };
 		2A96E9B9199E61D500C4B6B3 /* SpriteKitBlaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitBlaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A96E9BC199E61D500C4B6B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -120,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				2A865B6F19A3DBBD004A59D7 /* RSUpdateProtocol.h */,
+				2A865B7D19A40146004A59D7 /* RSHealthProtocol.h */,
 				2A865B6419A22A09004A59D7 /* RSSpriteNode.h */,
 				2A865B6519A22A09004A59D7 /* RSSpriteNode.m */,
 				2A865B6719A34C01004A59D7 /* RSHealthBar.h */,

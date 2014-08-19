@@ -8,11 +8,15 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "RSUpdateProtocol.h"
+#import "RSHealthProtocol.h"
 #import "RSGameEntity.h"
+#import "RSSpriteNode.h"
 #include "globaldefs.h"
 
+#define MAX_HEALTH_VAL 100
+
 @interface RSHealthBar : SKNode <RSUpdateProtocol>
-@property (nonatomic, strong) void (^fnUpdate)(SKNode *node, RSGameInput *input, NSTimeInterval dt);
--(instancetype)initWithUpdateFunction:(void (^)(SKNode *sprite, RSGameInput *input, NSTimeInterval dt)) block;
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt;
+@property (nonatomic, strong) RSGameEntity<RSHealthProtocol> *entity;
+@property (nonatomic, strong) RSSpriteNode *sprite;
+-(instancetype)initEntity:(RSGameEntity<RSHealthProtocol> *)entity andSprite:(RSSpriteNode *)sprite;
 @end
