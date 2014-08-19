@@ -12,6 +12,8 @@
 #import "RSGameEntity.h"
 #include "globaldefs.h"
 
+#define MAX_HEALTH_VAL 100
+
 @interface KVCTest : NSObject
 @property (nonatomic) int testInt;
 @end
@@ -78,6 +80,19 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
 @property (nonatomic) Vector2d shootVector;
 @end
 @implementation RSTurretEntity
+@end
+
+@interface RSGameEntityWithHealth : RSGameEntity
+@property (nonatomic) int health;
+@end
+@implementation RSGameEntityWithHealth
+-(instancetype)initWithPosition:(Vector2d)p andUpdateFunction:(void (^)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt)) block;{
+    if (self = [super initWithPosition:p andUpdateFunction:block]) {
+        self.health = MAX_HEALTH_VAL;
+    }
+    return self;
+}
+
 @end
 
 
@@ -147,10 +162,12 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
         _winSize = CGSizeMake(size.width, size.height);
 
         // init world
-        __block RSGameEntity *playerEntity;
+        __block RSGameEntityWithHealth *playerEntity;
         __block RSTurretEntity *turretEntity;
+        __block RSGameEntityWithHealth *cannonEntity;
+        
         _entities = @[
-                      playerEntity = [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
+                      playerEntity = [[RSGameEntityWithHealth alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
                                                              andUpdateFunction:^(RSGameEntity * entity, RSGameInput *input, NSTimeInterval dt) {
                                                                              State s = accelerate(entity.state, input.acceleration, dt);
                                                                              // clamp movement inside the bounds of screen
@@ -174,7 +191,7 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                                                              }
                                                                              entity.state = s;
                                                            }],
-                                      [[RSGameEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
+                        cannonEntity = [[RSGameEntityWithHealth alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:NULL],
                         turretEntity =[[RSTurretEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:^(RSGameEntity * me, RSGameInput *intput, NSTimeInterval dt) {

@@ -6,22 +6,28 @@
 //  Copyright (c) 2014 Fun Redoc. All rights reserved.
 //
 
-#import "RSSpriteNodeWithHealthBar.h"
-#import "RSGameEntityWithHealth.h"
+#import "RSHealthBar.h"
 
 const int MaxHP = 100;
 const float HealthBarWidth = 40.0f;
 const float HealthBarHeight = 4.0f;
 
 
-@implementation RSSpriteNodeWithHealthBar {
-    SKNode *_healthBar;
+@implementation RSHealthBar
+
+-(instancetype)initWithUpdateFunction:(void (^)(SKNode *sprite, RSGameInput *input, NSTimeInterval dt)) block {
+    if (self = [super init]) {
+        self.fnUpdate = block;
+    }
+    return self;
 }
 
 -(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt {
-    [super updateWithInput:input dt:dt];
-    
-    return self;
+        if(_fnUpdate) {
+            __block id blockSelf = self;
+            _fnUpdate(blockSelf, input, dt);
+        }
+        return self;
 }
 
 
