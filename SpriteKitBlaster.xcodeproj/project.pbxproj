@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A865B5C19A21F61004A59D7 /* RSGameInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B5B19A21F61004A59D7 /* RSGameInput.m */; };
+		2A865B6319A2225B004A59D7 /* RSGameEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6219A2225B004A59D7 /* RSGameEntity.m */; };
+		2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6519A22A09004A59D7 /* RSSpriteNode.m */; };
+		2A865B6919A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6819A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m */; };
 		2A96E9BD199E61D500C4B6B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BC199E61D500C4B6B3 /* Foundation.framework */; };
 		2A96E9BF199E61D500C4B6B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */; };
 		2A96E9C1199E61D500C4B6B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9C0199E61D500C4B6B3 /* UIKit.framework */; };
@@ -26,7 +30,6 @@
 		2A96E9F0199E61D500C4B6B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A96E9EE199E61D500C4B6B3 /* InfoPlist.strings */; };
 		2A96E9F2199E61D500C4B6B3 /* SpriteKitBlasterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A96E9F1199E61D500C4B6B3 /* SpriteKitBlasterTests.m */; };
 		2A96E9FC199EBE9000C4B6B3 /* Art in Resources */ = {isa = PBXBuildFile; fileRef = 2A96E9FB199EBE9000C4B6B3 /* Art */; };
-		2A96E9FF19A14DBC00C4B6B3 /* RSGameEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A96E9FE19A14DBC00C4B6B3 /* RSGameEntity.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A865B5A19A21F61004A59D7 /* RSGameInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameInput.h; sourceTree = "<group>"; };
+		2A865B5B19A21F61004A59D7 /* RSGameInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameInput.m; sourceTree = "<group>"; };
+		2A865B5F19A22234004A59D7 /* RSGameEntityProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSGameEntityProtocol.h; sourceTree = "<group>"; };
+		2A865B6019A2225B004A59D7 /* globaldefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = globaldefs.h; sourceTree = "<group>"; };
+		2A865B6119A2225B004A59D7 /* RSGameEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameEntity.h; sourceTree = "<group>"; };
+		2A865B6219A2225B004A59D7 /* RSGameEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameEntity.m; sourceTree = "<group>"; };
+		2A865B6419A22A09004A59D7 /* RSSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSpriteNode.h; sourceTree = "<group>"; };
+		2A865B6519A22A09004A59D7 /* RSSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSpriteNode.m; sourceTree = "<group>"; };
+		2A865B6719A34C01004A59D7 /* RSSpriteNodeWithHealthBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSpriteNodeWithHealthBar.h; sourceTree = "<group>"; };
+		2A865B6819A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSpriteNodeWithHealthBar.m; sourceTree = "<group>"; };
 		2A96E9B9199E61D500C4B6B3 /* SpriteKitBlaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitBlaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A96E9BC199E61D500C4B6B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -65,9 +78,6 @@
 		2A96E9EF199E61D500C4B6B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A96E9F1199E61D500C4B6B3 /* SpriteKitBlasterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteKitBlasterTests.m; sourceTree = "<group>"; };
 		2A96E9FB199EBE9000C4B6B3 /* Art */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Art; sourceTree = "<group>"; };
-		2A96E9FD19A14DBC00C4B6B3 /* RSGameEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSGameEntity.h; path = ../RSGameEntity.h; sourceTree = "<group>"; };
-		2A96E9FE19A14DBC00C4B6B3 /* RSGameEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSGameEntity.m; path = ../RSGameEntity.m; sourceTree = "<group>"; };
-		2A96EA0019A14E1200C4B6B3 /* globaldefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = globaldefs.h; path = ../globaldefs.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,9 +139,16 @@
 		2A96E9C4199E61D500C4B6B3 /* SpriteKitBlaster */ = {
 			isa = PBXGroup;
 			children = (
-				2A96EA0019A14E1200C4B6B3 /* globaldefs.h */,
-				2A96E9FD19A14DBC00C4B6B3 /* RSGameEntity.h */,
-				2A96E9FE19A14DBC00C4B6B3 /* RSGameEntity.m */,
+				2A865B6019A2225B004A59D7 /* globaldefs.h */,
+				2A865B5F19A22234004A59D7 /* RSGameEntityProtocol.h */,
+				2A865B6119A2225B004A59D7 /* RSGameEntity.h */,
+				2A865B6219A2225B004A59D7 /* RSGameEntity.m */,
+				2A865B5A19A21F61004A59D7 /* RSGameInput.h */,
+				2A865B5B19A21F61004A59D7 /* RSGameInput.m */,
+				2A865B6419A22A09004A59D7 /* RSSpriteNode.h */,
+				2A865B6519A22A09004A59D7 /* RSSpriteNode.m */,
+				2A865B6719A34C01004A59D7 /* RSSpriteNodeWithHealthBar.h */,
+				2A865B6819A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m */,
 				2A96E9CD199E61D500C4B6B3 /* RSAppDelegate.h */,
 				2A96E9CE199E61D500C4B6B3 /* RSAppDelegate.m */,
 				2A96E9D0199E61D500C4B6B3 /* Main_iPhone.storyboard */,
@@ -278,11 +295,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A865B6319A2225B004A59D7 /* RSGameEntity.m in Sources */,
 				2A96E9CB199E61D500C4B6B3 /* main.m in Sources */,
-				2A96E9FF19A14DBC00C4B6B3 /* RSGameEntity.m in Sources */,
 				2A96E9CF199E61D500C4B6B3 /* RSAppDelegate.m in Sources */,
+				2A865B5C19A21F61004A59D7 /* RSGameInput.m in Sources */,
 				2A96E9D8199E61D500C4B6B3 /* RSViewController.m in Sources */,
 				2A96E9DB199E61D500C4B6B3 /* RSMyScene.m in Sources */,
+				2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */,
+				2A865B6919A34C01004A59D7 /* RSSpriteNodeWithHealthBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +521,7 @@
 				2A96E9F7199E61D500C4B6B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2A96E9F8199E61D500C4B6B3 /* Build configuration list for PBXNativeTarget "SpriteKitBlasterTests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +530,7 @@
 				2A96E9FA199E61D500C4B6B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

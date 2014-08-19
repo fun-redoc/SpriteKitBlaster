@@ -23,7 +23,6 @@
 #define BORLDER_COLLISION_DAMPING 0.9f
 #define MIN_SPEED_TO_BE_ABLE_TO_TURN 20.0f
 
-
 typedef CGPoint Vector2d;
 typedef struct structState {
     Vector2d v; // velocity
@@ -33,6 +32,5 @@ typedef struct structState {
 
 typedef boolean_t (^Test)(State);
 typedef State (^CollisionHandler)(State);
-
 
 #endif
