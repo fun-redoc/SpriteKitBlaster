@@ -9,7 +9,10 @@
 #import "RSMyScene.h"
 #import "RSGameInput.h"
 #import "RSSpriteNode.h"
+#import "RSPlayerSpriteNode.h"
+#import "RSTurretSpriteNode.h"
 #import "RSGameEntity.h"
+#import "RSTurretEntity.h"
 #include "globaldefs.h"
 
 #define MAX_HEALTH_VAL 100
@@ -76,12 +79,6 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     return newS;
 }
 
-@interface RSTurretEntity : RSGameEntity
-@property (nonatomic) Vector2d shootVector;
-@end
-@implementation RSTurretEntity
-@end
-
 @interface RSGameEntityWithHealth : RSGameEntity
 @property (nonatomic) int health;
 @end
@@ -95,34 +92,6 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
 
 @end
 
-
-@interface RSPlayerSpriteNode : RSSpriteNode
-@property (nonatomic) float angle;
-@property (nonatomic) float lastAngle;
--(void)rotateTowards:(float)angle;
-@end
-
-@implementation RSPlayerSpriteNode
--(void)rotateTowards:(float)angle {
-    
-    // Did the angle flip from +Pi to -Pi, or -Pi to +Pi?
-    if (self.lastAngle - angle < -M_PI)
-    {
-        self.angle += M_PI * 2.0f;
-    }
-    else if (self.lastAngle - angle > M_PI )
-    {
-        self.angle -= M_PI * 2.0f;
-    }
-    
-    self.lastAngle = angle;
-    
-    const float RotationBlendFactor = 0.2f;
-    self.angle = angle * RotationBlendFactor + self.angle * (1.0f - RotationBlendFactor);
-    
-    self.zRotation = NORMALIZE_ANGLE(self.angle);
-}
-@end
 
 @implementation RSMyScene {
     CGSize _winSize;
@@ -202,40 +171,13 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                       ].mutableCopy;
         
         // init view
-        __block RSPlayerSpriteNode *player;
+        RSPlayerSpriteNode *player;
         RSSpriteNode *cannon;
-        RSSpriteNode *turret;
+        RSTurretSpriteNode *turret;
         _sprites = @[
-                     player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player"
-                                                          andUpdateFunction:^(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt) {
-                                                              RSPlayerSpriteNode *mySprite = (RSPlayerSpriteNode *)sprite;
-                                                              mySprite.position = playerEntity.state.p  ;
-                                                              
-                                                              Vector2d v = playerEntity.state.v;
-                                                              
-                                                              float speedSquare = v.x*v.x + v.y*v.y;
-                                                              if (speedSquare > MIN_SPEED_TO_BE_ABLE_TO_TURN * MIN_SPEED_TO_BE_ABLE_TO_TURN ) {
-                                                               
-                                                                  float angle = atan2f(v.y, v.x);
-                                                                  
-                                                                  [mySprite rotateTowards:angle];
-                                                              }
-                                                              
-                                                          }],
-                     
-                     cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon" andUpdateFunction:NULL],
-                     turret = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret"
-                                          andUpdateFunction:^(RSSpriteNode *me, RSGameInput *input, NSTimeInterval dt) {
-                                              Vector2d v = turretEntity.shootVector;
-                                              float angle = atan2f(v.y, v.x);
-                                              
-                                              // damping!
-                                              const float RotationBlendFactor = 0.05f;
-                                              float newRotationAngle = NORMALIZE_ANGLE(angle);
-                                              float dampedNewRotationAngle = newRotationAngle*RotationBlendFactor + me.zRotation*(1.0f - RotationBlendFactor);
-                                              me.zRotation = dampedNewRotationAngle;
-                                        }]
-                     
+                     player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player" andEntity:playerEntity],
+                     cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon"],
+                     turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:turretEntity]
                     ].mutableCopy;
         
         
@@ -312,7 +254,7 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     
     // update view
     for (RSSpriteNode *sprite in _sprites) {
-        [sprite updateWithInput:input dt:_deltaTime];
+        [sprite update];
     }
 
 }

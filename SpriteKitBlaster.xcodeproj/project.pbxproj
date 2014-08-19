@@ -12,6 +12,9 @@
 		2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6519A22A09004A59D7 /* RSSpriteNode.m */; };
 		2A865B6919A34C01004A59D7 /* RSHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6819A34C01004A59D7 /* RSHealthBar.m */; };
 		2A865B6E19A38B8F004A59D7 /* acknowledgement.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */; };
+		2A865B7619A3F278004A59D7 /* RSPlayerSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7519A3F278004A59D7 /* RSPlayerSpriteNode.m */; };
+		2A865B7919A3F46B004A59D7 /* RSTurretSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */; };
+		2A865B7C19A3F513004A59D7 /* RSTurretEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */; };
 		2A96E9BD199E61D500C4B6B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BC199E61D500C4B6B3 /* Foundation.framework */; };
 		2A96E9BF199E61D500C4B6B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */; };
 		2A96E9C1199E61D500C4B6B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9C0199E61D500C4B6B3 /* UIKit.framework */; };
@@ -55,6 +58,12 @@
 		2A865B6819A34C01004A59D7 /* RSHealthBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSHealthBar.m; sourceTree = "<group>"; };
 		2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = acknowledgement.txt; sourceTree = "<group>"; };
 		2A865B6F19A3DBBD004A59D7 /* RSUpdateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSUpdateProtocol.h; sourceTree = "<group>"; };
+		2A865B7419A3F278004A59D7 /* RSPlayerSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPlayerSpriteNode.h; sourceTree = "<group>"; };
+		2A865B7519A3F278004A59D7 /* RSPlayerSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPlayerSpriteNode.m; sourceTree = "<group>"; };
+		2A865B7719A3F46B004A59D7 /* RSTurretSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTurretSpriteNode.h; sourceTree = "<group>"; };
+		2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTurretSpriteNode.m; sourceTree = "<group>"; };
+		2A865B7A19A3F513004A59D7 /* RSTurretEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTurretEntity.h; sourceTree = "<group>"; };
+		2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTurretEntity.m; sourceTree = "<group>"; };
 		2A96E9B9199E61D500C4B6B3 /* SpriteKitBlaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitBlaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A96E9BC199E61D500C4B6B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -115,6 +124,10 @@
 				2A865B6519A22A09004A59D7 /* RSSpriteNode.m */,
 				2A865B6719A34C01004A59D7 /* RSHealthBar.h */,
 				2A865B6819A34C01004A59D7 /* RSHealthBar.m */,
+				2A865B7419A3F278004A59D7 /* RSPlayerSpriteNode.h */,
+				2A865B7519A3F278004A59D7 /* RSPlayerSpriteNode.m */,
+				2A865B7719A3F46B004A59D7 /* RSTurretSpriteNode.h */,
+				2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -124,6 +137,8 @@
 			children = (
 				2A865B6119A2225B004A59D7 /* RSGameEntity.h */,
 				2A865B6219A2225B004A59D7 /* RSGameEntity.m */,
+				2A865B7A19A3F513004A59D7 /* RSTurretEntity.h */,
+				2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */,
 			);
 			name = World;
 			sourceTree = "<group>";
@@ -335,10 +350,13 @@
 				2A96E9CB199E61D500C4B6B3 /* main.m in Sources */,
 				2A96E9CF199E61D500C4B6B3 /* RSAppDelegate.m in Sources */,
 				2A865B5C19A21F61004A59D7 /* RSGameInput.m in Sources */,
+				2A865B7619A3F278004A59D7 /* RSPlayerSpriteNode.m in Sources */,
 				2A96E9D8199E61D500C4B6B3 /* RSViewController.m in Sources */,
 				2A96E9DB199E61D500C4B6B3 /* RSMyScene.m in Sources */,
 				2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */,
+				2A865B7C19A3F513004A59D7 /* RSTurretEntity.m in Sources */,
 				2A865B6919A34C01004A59D7 /* RSHealthBar.m in Sources */,
+				2A865B7919A3F46B004A59D7 /* RSTurretSpriteNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

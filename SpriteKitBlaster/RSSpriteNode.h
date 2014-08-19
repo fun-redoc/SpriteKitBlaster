@@ -9,10 +9,8 @@
 #import <SpriteKit/SpriteKit.h>
 #import "RSUpdateProtocol.h"
 #import "RSGameEntity.h"
+#import "RSGameEntity.h"
 #include "globaldefs.h"
 
 @interface RSSpriteNode : SKSpriteNode <RSUpdateProtocol>
-@property (nonatomic, strong) void (^fnUpdate)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt);
--(instancetype)initWithImageNamed:(NSString *)imageName andUpdateFunction:(void (^)(RSSpriteNode *sprite, RSGameInput *input, NSTimeInterval dt)) block;
--(instancetype)updateWithInput:(RSGameInput *)input dt:(NSTimeInterval)dt;
 @end
