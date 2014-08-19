@@ -7,6 +7,7 @@
 //
 
 #import "RSSpriteNodeWithHealthBar.h"
+#import "RSGameEntityWithHealth.h"
 
 const int MaxHP = 100;
 const float HealthBarWidth = 40.0f;
@@ -17,7 +18,7 @@ const float HealthBarHeight = 4.0f;
     SKNode *_healthBar;
 }
 
-+(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *)entity {
++(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(RSGameEntityWithHealth *)entity {
     RSSpriteNodeWithHealthBar *inst = [RSSpriteNodeWithHealthBar spriteNodeWithImageNamed:imageName];
     inst.entity = entity;
     return inst;

@@ -12,6 +12,6 @@
 
 @interface RSSpriteNode : SKSpriteNode<RSGameEntityProtocol>
 @property (strong, nonatomic) RSGameEntity *entity;
-@property (nonatomic, readonly) Vector2d acceleration;
+//@property (nonatomic, readonly) Vector2d acceleration;
 +(instancetype)spriteNodeWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *) entity;
 @end
