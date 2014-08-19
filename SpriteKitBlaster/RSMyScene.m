@@ -179,7 +179,8 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                      player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player" andEntity:playerEntity],
                      cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon"],
                      turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:turretEntity],
-                     [[RSHealthBar alloc] initEntity:playerEntity andSprite:player]
+                     [[RSHealthBar alloc] initEntity:playerEntity andSprite:player],
+                     [[RSHealthBar alloc] initEntity:cannonEntity andSprite:cannon]
                     ].mutableCopy;
         
         
