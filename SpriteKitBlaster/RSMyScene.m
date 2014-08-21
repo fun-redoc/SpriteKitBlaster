@@ -73,7 +73,7 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
 }
 
 @interface RSGameEntityWithHealth : RSGameEntity<RSHealthProtocol>
-//@property (nonatomic) int health;
+@property (nonatomic) int health;
 @end
 @implementation RSGameEntityWithHealth
 @synthesize health = _health;
@@ -189,12 +189,25 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                         [RSGameCollision entity1:playerEntity entity2:cannonEntity
                                           action:^() {
                                               [blockScene runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Collision.wav" waitForCompletion:NO]];
-                                              const float CannonCollisionDamping = 0.8f;
+//                                              const float CannonCollisionDamping = 0.8f;
+                                              const float CannonCollisionSpeed = 200.0f;
+                                              
                                               State s = playerEntity.state;
-                                              s.a.x = -s.a.x * CannonCollisionDamping;
-                                              s.v.x = -s.v.x * CannonCollisionDamping;
-                                              s.a.y = -s.a.y * CannonCollisionDamping;
-                                              s.v.y = -s.v.y * CannonCollisionDamping;
+                                              float angle = atan2f(s.v.y, s.v.x);
+                                              
+                                              s.v.x = -cosf(angle) * CannonCollisionSpeed;
+                                              s.v.y = -sinf(angle) * CannonCollisionSpeed;
+//                                              s.a.x = 0.0f;
+//                                              s.a.y = 0.0f;
+                                              
+                                              playerEntity.health = MAX(0, playerEntity.health - 20);
+                                              cannonEntity.health = MAX(0, cannonEntity.health - 5);
+                                              
+//                                              s.a.x = -s.a.x * CannonCollisionDamping;
+//                                              s.v.x = -s.v.x * CannonCollisionDamping;
+//                                              s.a.y = -s.a.y * CannonCollisionDamping;
+//                                              s.v.y = -s.v.y * CannonCollisionDamping;
+                                              
                                               playerEntity.state = s;
                                           }]
                         ].mutableCopy;
