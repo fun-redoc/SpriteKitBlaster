@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Fun Redoc. All rights reserved.
 //
 
+@import CoreMotion;
+@import AVFoundation;
+
 #import "RSMyScene.h"
 #import "RSGameInput.h"
 #import "RSSpriteNode.h"
@@ -22,6 +25,9 @@
 @end
 @implementation KVCTest
 @end
+
+const float CannonCollisionRadius = 20.0f;
+const float PlayerCollisionRadius = 10.0f;
 
 CollisionHandler fnVerticalCollisionHandler = ^(State e) {
     e.a.x = -e.a.x * BORLDER_COLLISION_DAMPING;
@@ -42,24 +48,11 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
 State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     // when the device ist tilded add max accelerattion in the tilt direction
     // beware, because of the landscape mode tilt y-achses means movement x-axes
+
     State newS = state;
     Vector2d newA = newS.a;
-    if (a.y > TILT_DEVICE_ACCELERATION)
-    {
-        newA.x = -MAX_PLAYER_ACCELERATION;
-    }
-    else if (a.y < -TILT_DEVICE_ACCELERATION)
-    {
-        newA.x = MAX_PLAYER_ACCELERATION;
-    }
-    if (a.x < -TILT_DEVICE_ACCELERATION)
-    {
-        newA.y = -MAX_PLAYER_ACCELERATION;
-    }
-    else if (a.x > TILT_DEVICE_ACCELERATION)
-    {
-        newA.y = MAX_PLAYER_ACCELERATION;
-    }
+    newA.x = - a.y * MAX_PLAYER_ACCELERATION;
+    newA.y = a.x * MAX_PLAYER_ACCELERATION;
     newS.a = newA;
     
     // calculate the new speed (Newton Approximation), und clamp
@@ -93,6 +86,21 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
 
 @end
 
+@interface RSGameCollision : NSObject
+@property (nonatomic, strong) RSGameEntity *entity1;
+@property (nonatomic, strong) RSGameEntity *entity2;
+@property (nonatomic, strong) void (^action)();
++(instancetype)entity1:(RSGameEntity *)e1 entity2:(RSGameEntity *)e2 action:(void (^)()) block;
+@end
+@implementation RSGameCollision
++(instancetype)entity1:(RSGameEntity *)e1 entity2:(RSGameEntity *)e2 action:(void (^)()) block {
+    RSGameCollision *inst = [[RSGameCollision alloc] init];
+    inst.entity1 = e1;
+    inst.entity2 = e2;
+    inst.action = block;
+    return inst;
+}
+@end
 
 @implementation RSMyScene {
     CGSize _winSize;
@@ -106,6 +114,7 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     
     NSMutableArray *_sprites;
     NSMutableArray *_entities;
+    NSMutableArray *_collisions;
     
 }
 
@@ -171,6 +180,25 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                                            }]
                       ].mutableCopy;
         
+        playerEntity.collisionRadius = PlayerCollisionRadius;
+        cannonEntity.collisionRadius = CannonCollisionRadius;
+        
+        
+        __block RSMyScene *blockScene = self;
+        _collisions = @[
+                        [RSGameCollision entity1:playerEntity entity2:cannonEntity
+                                          action:^() {
+                                              [blockScene runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Collision.wav" waitForCompletion:NO]];
+                                              const float CannonCollisionDamping = 0.8f;
+                                              State s = playerEntity.state;
+                                              s.a.x = -s.a.x * CannonCollisionDamping;
+                                              s.v.x = -s.v.x * CannonCollisionDamping;
+                                              s.a.y = -s.a.y * CannonCollisionDamping;
+                                              s.v.y = -s.v.y * CannonCollisionDamping;
+                                              playerEntity.state = s;
+                                          }]
+                        ].mutableCopy;
+        
         // init view
         RSPlayerSpriteNode *player;
         RSSpriteNode *cannon;
@@ -234,6 +262,16 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     return CGPointMake(_accelerometer.x, _accelerometer.y);
 }
 
+- (BOOL)checkCollisionRadial:(RSGameEntity *)entity1 with:(RSGameEntity *)entity2 {
+    float deltaX = entity1.state.p.x - entity2.state.p.x;
+    float deltaY = entity1.state.p.y - entity2.state.p.y;
+    
+    float distance = sqrtf(deltaX*deltaX + deltaY*deltaY);
+    float collisionRadius = entity1.collisionRadius + entity2.collisionRadius;
+    
+    return distance <= collisionRadius;    
+}
+
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
     
@@ -253,6 +291,13 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     // update world
     for (RSGameEntity *entity in _entities) {
         [entity updateWithInput:input dt:_deltaTime];
+    }
+    
+    // handle collisions
+    for (RSGameCollision *collision in _collisions) {
+        if( [self checkCollisionRadial:collision.entity1 with:collision.entity2]) {
+            collision.action();
+        }
     }
     
     // update view

@@ -12,6 +12,7 @@
 
 @interface RSGameEntity : NSObject // <RSGameEntityProtocol>
 @property (nonatomic) State state; // position
+@property (nonatomic) float collisionRadius;
 @property (nonatomic, strong) void (^fnUpdate)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt);
 
 -(instancetype)initWithPosition:(Vector2d)p andUpdateFunction:(void (^)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt)) block;
