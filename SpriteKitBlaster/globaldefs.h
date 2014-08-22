@@ -7,6 +7,9 @@
 //
 
 #ifndef SpriteKitBlaster_Header_h
+
+#include <CoreGraphics/CGGeometry.h>
+
 #define SpriteKitBlaster_Header_h
 
 #define SK_DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) * 0.01745329252f) // PI / 180
@@ -32,7 +35,11 @@ typedef struct structState {
     Vector2d p; // position
 } State;
 
-typedef boolean_t (^Test)(State);
-typedef State (^CollisionHandler)(State);
+//typedef boolean_t (^Test)(State);
+//typedef State (^CollisionHandler)(State);
+
+State fnVerticalCollisionHandler(State e);
+State fnHorizontalCollisionHandler(State e);
+State accelerate(State state, Vector2d a, double dt);
 
 #endif

@@ -17,6 +17,8 @@
 		2A865B7C19A3F513004A59D7 /* RSTurretEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */; };
 		2A865B8119A69087004A59D7 /* RSGameEntityWithHealth.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B8019A69087004A59D7 /* RSGameEntityWithHealth.m */; };
 		2A865B8419A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B8319A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.m */; };
+		2A865B8619A729D3004A59D7 /* backlog.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A865B8519A729D3004A59D7 /* backlog.txt */; };
+		2A865B8C19A7308D004A59D7 /* globaldefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B8B19A7308C004A59D7 /* globaldefs.c */; };
 		2A96E9BD199E61D500C4B6B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BC199E61D500C4B6B3 /* Foundation.framework */; };
 		2A96E9BF199E61D500C4B6B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */; };
 		2A96E9C1199E61D500C4B6B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A96E9C0199E61D500C4B6B3 /* UIKit.framework */; };
@@ -71,6 +73,8 @@
 		2A865B8019A69087004A59D7 /* RSGameEntityWithHealth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameEntityWithHealth.m; sourceTree = "<group>"; };
 		2A865B8219A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameEntityWithHealthAndSpin.h; sourceTree = "<group>"; };
 		2A865B8319A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameEntityWithHealthAndSpin.m; sourceTree = "<group>"; };
+		2A865B8519A729D3004A59D7 /* backlog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = backlog.txt; sourceTree = "<group>"; };
+		2A865B8B19A7308C004A59D7 /* globaldefs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = globaldefs.c; sourceTree = "<group>"; };
 		2A96E9B9199E61D500C4B6B3 /* SpriteKitBlaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitBlaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A96E9BC199E61D500C4B6B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2A96E9BE199E61D500C4B6B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -212,7 +216,9 @@
 			isa = PBXGroup;
 			children = (
 				2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */,
+				2A865B8519A729D3004A59D7 /* backlog.txt */,
 				2A865B6019A2225B004A59D7 /* globaldefs.h */,
+				2A865B8B19A7308C004A59D7 /* globaldefs.c */,
 				2A865B6F19A3DBBD004A59D7 /* RSUpdateProtocol.h */,
 				2A865B7E19A68E39004A59D7 /* RSHealthProtocol.h */,
 				2A865B7219A3F093004A59D7 /* Boilerplate */,
@@ -337,6 +343,7 @@
 				2A96E9DD199E61D500C4B6B3 /* Spaceship.png in Resources */,
 				2A96E9DF199E61D500C4B6B3 /* Images.xcassets in Resources */,
 				2A96E9D5199E61D500C4B6B3 /* Main_iPad.storyboard in Resources */,
+				2A865B8619A729D3004A59D7 /* backlog.txt in Resources */,
 				2A96E9D2199E61D500C4B6B3 /* Main_iPhone.storyboard in Resources */,
 				2A96E9C9199E61D500C4B6B3 /* InfoPlist.strings in Resources */,
 				2A865B6E19A38B8F004A59D7 /* acknowledgement.txt in Resources */,
@@ -358,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A865B8C19A7308D004A59D7 /* globaldefs.c in Sources */,
 				2A865B8419A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.m in Sources */,
 				2A865B6319A2225B004A59D7 /* RSGameEntity.m in Sources */,
 				2A96E9CB199E61D500C4B6B3 /* main.m in Sources */,

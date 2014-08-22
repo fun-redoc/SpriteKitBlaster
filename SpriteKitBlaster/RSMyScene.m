@@ -28,52 +28,25 @@
 @implementation KVCTest
 @end
 
+@interface RSSShootEntity : RSGameEntity
+@property (nonatomic) float angle;
+@property (nonatomic, readonly, getter = isFiring) BOOL firing;
+-(void)fireWithAngle:(float) angle;
+-(void)endFire;
+@end
+@implementation RSSShootEntity
+@synthesize firing = _firing;
+-(void)fireWithAngle:(float) angle {
+    _angle = angle;
+    _firing = YES;
+}
+-(void)endFire {
+    _firing = NO;
+}
+@end
+
 const float CannonCollisionRadius = 20.0f;
 const float PlayerCollisionRadius = 10.0f;
-
-CollisionHandler fnVerticalCollisionHandler = ^(State e) {
-    e.a.x = -e.a.x * BORLDER_COLLISION_DAMPING;
-    e.v.x = -e.v.x * BORLDER_COLLISION_DAMPING;
-    e.a.y = e.a.y * BORLDER_COLLISION_DAMPING;
-    e.v.y = e.v.y * BORLDER_COLLISION_DAMPING;
-    return e;
-};
-
-CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
-    e.a.x = e.a.x * BORLDER_COLLISION_DAMPING;
-    e.v.x = e.v.x * BORLDER_COLLISION_DAMPING;
-    e.a.y = -e.a.y * BORLDER_COLLISION_DAMPING;
-    e.v.y = -e.v.y * BORLDER_COLLISION_DAMPING;
-    return e;
-};
-
-State accelerate(State state, Vector2d a, NSTimeInterval dt) {
-    // when the device ist tilded add max accelerattion in the tilt direction
-    // beware, because of the landscape mode tilt y-achses means movement x-axes
-    const float MovementDamping = 0.999f;
-
-    State newS = state;
-    Vector2d newA = newS.a;
-    newA.x = - a.y * MAX_PLAYER_ACCELERATION;
-    newA.y = a.x * MAX_PLAYER_ACCELERATION;
-    newS.a = newA;
-    
-    // calculate the new speed (Newton Approximation), und clamp
-    Vector2d newV = newS.v;
-    newV.x += newS.a.x * dt; newV.x *= MovementDamping;
-    newV.y += newS.a.y * dt; newV.y *= MovementDamping;
-    newV.x = fmaxf(fminf(newV.x, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
-    newV.y = fmaxf(fminf(newV.y, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
-    newS.v = newV;
-    
-    // calculate the new position in the world
-    Vector2d newP = newS.p;
-    newP.x = newS.p.x + newS.v.x*dt;
-    newP.y = newS.p.y + newS.v.y*dt;
-    newS.p = newP;
-    
-    return newS;
-}
 
 @interface RSGameCollision : NSObject
 @property (nonatomic, strong) RSGameEntity *entity1;
@@ -98,8 +71,14 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     
     CMMotionManager *_motionManager;
     
+    CGPoint _touchLocation;
+    CFTimeInterval _touchTime;
+    UITouch *_touch;
+    
     NSTimeInterval _lastUpdateTime;
     NSTimeInterval _deltaTime;
+    
+    BOOL _fireEvent;
     
     NSMutableArray *_sprites;
     NSMutableArray *_entities;
@@ -127,12 +106,15 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
         
         self.backgroundColor = [SKColor colorWithRed:94.0/255.0 green:63.0/255.0 blue:107.0/255.0 alpha:1.0];
         
+        _fireEvent = NO;
+        
         _winSize = CGSizeMake(size.width, size.height);
 
         // init world
         __block RSGameEntityWithHealthAndSpin *playerEntity;
         __block RSTurretEntity *turretEntity;
         __block RSGameEntityWithHealth *cannonEntity;
+        __block RSSShootEntity *playerShootEntity;
         
         _entities = @[
                       playerEntity = [[RSGameEntityWithHealthAndSpin alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
@@ -177,7 +159,11 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                                                RSTurretEntity *turret = (RSTurretEntity *)me;
                                                                turret.shootVector = CGPointMake(playerEntity.state.p.x - turret.state.p.x,
                                                                                                 playerEntity.state.p.y - turret.state.p.y);
-                                                           }]
+                                                           }],
+                      playerShootEntity = [[RSSShootEntity alloc] initWithPosition:CGPointZero andUpdateFunction:^(RSGameEntity * me, RSGameInput *intput, NSTimeInterval dt) {
+                          RSSShootEntity * myself = (RSSShootEntity *)me;
+                          // TODO maybe not needed
+                      }]
                       ].mutableCopy;
         
         playerEntity.collisionRadius = PlayerCollisionRadius;
@@ -189,7 +175,6 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                         [RSGameCollision entity1:playerEntity entity2:cannonEntity
                                           action:^() {
                                               [blockScene runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Collision.wav" waitForCompletion:NO]];
-//                                              const float CannonCollisionDamping = 0.8f;
                                               const float CannonCollisionSpeed = 200.0f;
                                               
                                               State s = playerEntity.state;
@@ -197,16 +182,10 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
                                               
                                               s.v.x = -cosf(angle) * CannonCollisionSpeed;
                                               s.v.y = -sinf(angle) * CannonCollisionSpeed;
-//                                              s.a.x = 0.0f;
-//                                              s.a.y = 0.0f;
                                               
                                               playerEntity.health = MAX(0, playerEntity.health - 20);
                                               cannonEntity.health = MAX(0, cannonEntity.health - 5);
                                               
-//                                              s.a.x = -s.a.x * CannonCollisionDamping;
-//                                              s.v.x = -s.v.x * CannonCollisionDamping;
-//                                              s.a.y = -s.a.y * CannonCollisionDamping;
-//                                              s.v.y = -s.v.y * CannonCollisionDamping;
                                               
                                               playerEntity.state = s;
                                               
@@ -249,6 +228,38 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     _motionManager = nil;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (!_touch && !_fireEvent) {
+        _touch = [touches anyObject];
+        CGPoint location = [_touch locationInNode:self];
+        _touchLocation = location;
+        _touchTime = CACurrentMediaTime();
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    const float ignoreSwipesLonger = 0.3f;
+    const float minSwipeLength = 4.0f;
+    
+    if (!_fireEvent && [touches containsObject:_touch]) {
+        if( CACurrentMediaTime() - _touchTime < ignoreSwipesLonger ) {
+            // measure a swipe length, to short is not a swipe
+            CGPoint location = [_touch locationInNode:self];
+            CGPoint diff = CGPointMake(location.x - _touchLocation.x, location.y - _touchLocation.y);
+            float diffLength = sqrtf(diff.x*diff.x + diff.y*diff.y);
+            if (diffLength > minSwipeLength) {
+                //
+                _touch = nil;
+                _fireEvent = YES;
+                
+            }
+        }
+
+    }
+    
+}
 
 - (void)startMonitoringAcceleration
 {
@@ -302,12 +313,9 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     
     
     // transform input into world events
+    // TODO regiester fireInputEvent
+    // TODO register when the ship can fire again
     RSGameInput *input= [RSGameInput GameInputWithAcceleration:self.acceleration];
-    
-    // update world
-    for (RSGameEntity *entity in _entities) {
-        [entity updateWithInput:input dt:_deltaTime];
-    }
     
     // handle collisions
     for (RSGameCollision *collision in _collisions) {
@@ -315,6 +323,12 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
             collision.action();
         }
     }
+    
+    // update world
+    for (RSGameEntity *entity in _entities) {
+        [entity updateWithInput:input dt:_deltaTime];
+    }
+    
     
     // update view
     for (RSSpriteNode *sprite in _sprites) {

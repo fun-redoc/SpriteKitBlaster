@@ -1,0 +1,13 @@
+-T totally redesign only using sknode objects, loose framework independency but gain sptitekit functionality like actions, physics and collisions handling
+-F ability to shoot for the player, only once at a time,while the missile is flying no futher shoot is avaliable, shoot on swipe
+-T consider replacing entities update callback block by a simple delegate
+-F destroy an object (e.g the canon an v.v)
+-F shoot ability for the cannon, shoot after a random time is passed
+-F destroy player
+-F scrolling horizontally
+-F obstacles
+-F moving obstacles
+-F scrolling vertically
+-F make scrolling paralax
+-F make a head up display showing the map
+-F make it a two player game using blootooth and websockets
