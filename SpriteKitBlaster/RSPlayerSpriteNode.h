@@ -7,8 +7,9 @@
 //
 
 #import "RSSpriteNode.h"
+#import "RSGameEntityWithHealthAndSpin.h"
 
 @interface RSPlayerSpriteNode : RSSpriteNode
-@property (nonatomic, strong) RSGameEntity *entity;
--(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *) entity;;
+@property (nonatomic, strong) RSGameEntityWithHealthAndSpin *entity;
+-(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntityWithHealthAndSpin *) entity;;
 @end

@@ -15,7 +15,7 @@
 @end
 
 @implementation RSPlayerSpriteNode
--(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *) entity {
+-(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntityWithHealthAndSpin *) entity {
     if( self = [super initWithImageNamed:imageName] ) {
         self.entity = entity;
     }
@@ -56,7 +56,7 @@
     const float RotationBlendFactor = 0.2f;
     self.angle = angle * RotationBlendFactor + self.angle * (1.0f - RotationBlendFactor);
     
-    self.zRotation = NORMALIZE_ANGLE(self.angle);
+    self.zRotation = NORMALIZE_ANGLE(self.angle) - SK_DEGREES_TO_RADIANS(self.entity.spin);
 }
 
 @end

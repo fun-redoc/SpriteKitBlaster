@@ -18,6 +18,8 @@
 #import "RSTurretEntity.h"
 #import "RSHealthBar.h"
 #import "RSHealthProtocol.h"
+#import "RSGameEntityWithHealth.h"
+#import "RSGameEntityWithHealthAndSpin.h"
 #include "globaldefs.h"
 
 @interface KVCTest : NSObject
@@ -48,6 +50,7 @@ CollisionHandler fnHorizontalCollisionHandler = ^(State e) {
 State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     // when the device ist tilded add max accelerattion in the tilt direction
     // beware, because of the landscape mode tilt y-achses means movement x-axes
+    const float MovementDamping = 0.999f;
 
     State newS = state;
     Vector2d newA = newS.a;
@@ -57,8 +60,8 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     
     // calculate the new speed (Newton Approximation), und clamp
     Vector2d newV = newS.v;
-    newV.x += newS.a.x * dt;
-    newV.y += newS.a.y * dt;
+    newV.x += newS.a.x * dt; newV.x *= MovementDamping;
+    newV.y += newS.a.y * dt; newV.y *= MovementDamping;
     newV.x = fmaxf(fminf(newV.x, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
     newV.y = fmaxf(fminf(newV.y, MAX_PLAYER_SPEED), -MAX_PLAYER_SPEED);
     newS.v = newV;
@@ -71,20 +74,6 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
     
     return newS;
 }
-
-@interface RSGameEntityWithHealth : RSGameEntity<RSHealthProtocol>
-@property (nonatomic) int health;
-@end
-@implementation RSGameEntityWithHealth
-@synthesize health = _health;
--(instancetype)initWithPosition:(Vector2d)p andUpdateFunction:(void (^)(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt)) block;{
-    if (self = [super initWithPosition:p andUpdateFunction:block]) {
-        _health = MAX_HEALTH_VAL;
-    }
-    return self;
-}
-
-@end
 
 @interface RSGameCollision : NSObject
 @property (nonatomic, strong) RSGameEntity *entity1;
@@ -141,34 +130,45 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
         _winSize = CGSizeMake(size.width, size.height);
 
         // init world
-        __block RSGameEntityWithHealth *playerEntity;
+        __block RSGameEntityWithHealthAndSpin *playerEntity;
         __block RSTurretEntity *turretEntity;
         __block RSGameEntityWithHealth *cannonEntity;
         
         _entities = @[
-                      playerEntity = [[RSGameEntityWithHealth alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
+                      playerEntity = [[RSGameEntityWithHealthAndSpin alloc] initWithPosition:CGPointMake(_winSize.width - 60.0f, 50.0f )
                                                              andUpdateFunction:^(RSGameEntity * entity, RSGameInput *input, NSTimeInterval dt) {
-                                                                             State s = accelerate(entity.state, input.acceleration, dt);
-                                                                             // clamp movement inside the bounds of screen
-                                                                             if (s.p.x < 0.0f) {
-                                                                                 s.p.x = 0.0f;
-                                                                                 s = fnVerticalCollisionHandler(s);
-                                                                             } else if (s.p.x > _winSize.width) {
-                                                                                 s.p.x = _winSize.width;
-                                                                                 s = fnVerticalCollisionHandler(s);
-                                                                             }
+                                                                 State s = accelerate(entity.state, input.acceleration, dt);
+                                                                 // clamp movement inside the bounds of screen
+                                                                 if (s.p.x < 0.0f) {
+                                                                     s.p.x = 0.0f;
+                                                                     s = fnVerticalCollisionHandler(s);
+                                                                 } else if (s.p.x > _winSize.width) {
+                                                                     s.p.x = _winSize.width;
+                                                                     s = fnVerticalCollisionHandler(s);
+                                                                 }
 
-                                                                             if (s.p.y < 0.0f)
-                                                                             {
-                                                                                 s.p.y = 0.0f;
-                                                                                 s = fnHorizontalCollisionHandler(s);
-                                                                             }
-                                                                             else if (s.p.y > _winSize.height)
-                                                                             {
-                                                                                 s.p.y = _winSize.height;
-                                                                                 s = fnHorizontalCollisionHandler(s);
-                                                                             }
-                                                                             entity.state = s;
+                                                                 if (s.p.y < 0.0f)
+                                                                 {
+                                                                     s.p.y = 0.0f;
+                                                                     s = fnHorizontalCollisionHandler(s);
+                                                                 }
+                                                                 else if (s.p.y > _winSize.height)
+                                                                 {
+                                                                     s.p.y = _winSize.height;
+                                                                     s = fnHorizontalCollisionHandler(s);
+                                                                 }
+                                                                 entity.state = s;
+                                                     
+                                                                // adjust spinn
+                                                                 RSGameEntityWithHealthAndSpin *me = (RSGameEntityWithHealthAndSpin *)entity;
+                                                                 if (me.spin > 0.0f)
+                                                                 {
+                                                                     me.spin -= 2.0f * 360.0f * dt;
+                                                                     if (me.spin < 0.0f)
+                                                                     {
+                                                                         me.spin = 0.0f;
+                                                                     }
+                                                                 }
                                                            }],
                         cannonEntity = [[RSGameEntityWithHealth alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:NULL],
@@ -209,6 +209,9 @@ State accelerate(State state, Vector2d a, NSTimeInterval dt) {
 //                                              s.v.y = -s.v.y * CannonCollisionDamping;
                                               
                                               playerEntity.state = s;
+                                              
+                                              // kick off spinning
+                                              playerEntity.spin = 180.0f * 3.0f;
                                           }]
                         ].mutableCopy;
         
