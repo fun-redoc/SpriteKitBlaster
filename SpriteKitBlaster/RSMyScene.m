@@ -87,10 +87,23 @@
     __block RSTurretEntity *_turretEntity;
     __block RSGameEntityWithHealth *_cannonEntity;
     
+    __block SKAction *_collisionSoundAction;
+    
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     NSLog(@"%@.%@ is now %@ but was %@", object, keyPath, [change objectForKey: NSKeyValueChangeNewKey], [change objectForKey: NSKeyValueChangeOldKey]);
+}
+
+
+-(void)loadSharedAssets
+{
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+            _collisionSoundAction = [SKAction playSoundFileNamed:@"Art/Sounds/Collision.wav"
+                                                                  waitForCompletion:NO];
+    });
 }
 
 #pragma mark - SKScene Livecycle
@@ -104,9 +117,11 @@
     int val = [[kvcTest valueForKey:@"testInt"] intValue];
     NSCAssert(val == 42, @"lajsdflkajsldkfj");
     
+    [self loadSharedAssets];
     
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
+        [self.scene runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Collision.wav" waitForCompletion:NO]];
         
         self.backgroundColor = [SKColor colorWithRed:94.0/255.0 green:63.0/255.0 blue:107.0/255.0 alpha:1.0];
         
@@ -210,6 +225,8 @@
 }
 
 -(void)didMoveToView:(SKView *)view {
+    [self.scene runAction:_collisionSoundAction];
+    
     _motionManager = [[CMMotionManager alloc] init];
     [self startMonitoringAcceleration];
 }
@@ -218,6 +235,7 @@
     [self stopMonitoringAcceleration];
     _motionManager = nil;
 }
+
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
