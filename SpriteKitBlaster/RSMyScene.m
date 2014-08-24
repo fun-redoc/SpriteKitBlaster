@@ -45,8 +45,8 @@
 }
 @end
 
-const float CannonCollisionRadius = 20.0f;
-const float PlayerCollisionRadius = 10.0f;
+//const float CannonCollisionRadius = 20.0f;
+//const float PlayerCollisionRadius = 10.0f;
 
 @interface RSGameCollision : NSObject
 @property (nonatomic, strong) RSGameEntity *entity1;
@@ -161,9 +161,6 @@ const float PlayerCollisionRadius = 10.0f;
                                                            }]
                       ].mutableCopy;
         
-        _playerEntity.collisionRadius = PlayerCollisionRadius;
-        _cannonEntity.collisionRadius = CannonCollisionRadius;
-        
         
         __block RSMyScene *blockScene = self;
         _collisions = @[
@@ -197,12 +194,17 @@ const float PlayerCollisionRadius = 10.0f;
         RSTurretSpriteNode *turret;
         [self addChild: player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player" andEntity:_playerEntity]];
         [self addChild: cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon"]];
-        [self addChild:turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:_turretEntity]];
+        [self addChild: turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:_turretEntity]];
         [self addChild:[[RSHealthBar alloc] initEntity:_playerEntity andSprite:player]];
         [self addChild:[[RSHealthBar alloc] initEntity:_cannonEntity andSprite:cannon]];
         
         cannon.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
         turret.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
+        
+        _playerEntity.collisionRadius = 1 + (MAX(player.size.height, player.size.width) / 2);
+        _cannonEntity.collisionRadius = 1 + (MAX(turret.size.height, turret.size.width) / 2);
+        _turretEntity.collisionRadius = 1 + (MAX(turret.size.height, turret.size.width) / 2);
+
     }
     return self;
 }
@@ -319,16 +321,27 @@ const float PlayerCollisionRadius = 10.0f;
 #pragma mark - game controller logic
 
 -(void)spawnShootWithVector:(Vector2d)v {
+    __block RSPlayerSpriteNode *shootSprite;
+    __block RSGameEntity *shoot;
+    __block RSGameCollision *collision;
+    
+    void (^removeShoot)()  = ^{
+        [_entities removeObject:shoot];
+        [_collisions removeObject:collision];
+        shootSprite.entity = NULL;
+        shoot = NULL;
+        _fireEvent = NO;
+    };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         const float shootVelocity = 400.0f; //poins per second
+
         _fireEvent = YES;
         Vector2d uv = unitVector(v);
         Vector2d velocityVector = linearProduct(uv, shootVelocity);
-        __block RSPlayerSpriteNode *shootSprite;
-        
-        __block RSGameEntity *shoot = [[RSGameEntity alloc] initWithPosition:_playerEntity.state.p andUpdateFunction:^(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt) {
+
+        shoot = [[RSGameEntity alloc] initWithPosition:_playerEntity.state.p andUpdateFunction:^(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt) {
             
             // update position
             State s = entity.state;
@@ -337,10 +350,7 @@ const float PlayerCollisionRadius = 10.0f;
             
             // remove if out of sight
             if ( s.p.x < 0 || s.p.x > _winSize.width || s.p.y < 0 || s.p.y > _winSize.height ) {
-                [_entities removeObject:entity];
-                shootSprite.entity = NULL;
-                entity = NULL;
-                _fireEvent = NO;
+                removeShoot();
             }
         }];
         
@@ -351,9 +361,20 @@ const float PlayerCollisionRadius = 10.0f;
         shoot.state = initialShootState;
         shootSprite = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/PlayerMissile" andEntity:shoot];
         
+        
         dispatch_async(dispatch_get_main_queue(), ^(){
+            [shootSprite runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Shoot.wav" waitForCompletion:NO]];
+            shoot.collisionRadius = MIN(shootSprite.size.height, shootSprite.size.width) / 2;
             [_entities addObject:shoot];
             [self addChild: shootSprite];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                collision = [RSGameCollision entity1:shoot entity2:_turretEntity action:^() {
+                    [shootSprite runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Hit.wav" waitForCompletion:NO]];
+                    _cannonEntity.health = MAX(0, _cannonEntity.health - 10);
+                    removeShoot();
+                }];
+                [_collisions addObject:collision];
+            });
         });
         
     });
