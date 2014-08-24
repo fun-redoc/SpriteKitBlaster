@@ -39,6 +39,7 @@ State accelerate(State state, Vector2d a, double dt) {
     newS.a = newA;
     
     // calculate the new speed (Newton Approximation), und clamp
+    
     Vector2d newV = newS.v;
     newV.x += newS.a.x * dt; newV.x *= MovementDamping;
     newV.y += newS.a.y * dt; newV.y *= MovementDamping;
@@ -53,4 +54,28 @@ State accelerate(State state, Vector2d a, double dt) {
     newS.p = newP;
     
     return newS;
+}
+
+
+// Vectors
+Vector2d unitVector(Vector2d v) {
+    Vector2d uv;
+    float l = VEC_LEN(v);
+    uv.x = v.x / l;
+    uv.y = v.y / l;
+    return uv;
+}
+
+Vector2d linearProduct(Vector2d v, float c) {
+    Vector2d r;
+    r.x = v.x * c;
+    r.y = v.y * c;
+    return r;
+}
+
+Vector2d vecAdd(Vector2d v1, Vector2d v2) {
+    Vector2d r;
+    r.x = v1.x + v2.x;
+    r.y = v1.y + v2.y;
+    return r;
 }

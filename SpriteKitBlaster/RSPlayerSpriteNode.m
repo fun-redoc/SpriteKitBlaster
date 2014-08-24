@@ -15,7 +15,7 @@
 @end
 
 @implementation RSPlayerSpriteNode
--(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntityWithHealthAndSpin *) entity {
+-(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *) entity {
     if( self = [super initWithImageNamed:imageName] ) {
         self.entity = entity;
     }
@@ -24,6 +24,10 @@
 
 -(instancetype)update {
     [super update];
+    if( !self.entity ) {
+        // when the entity disappeared no need to stay
+        [self removeFromParent];
+    }
     self.position = self.entity.state.p  ;
     
     Vector2d v = self.entity.state.v;
@@ -35,6 +39,9 @@
         
         [self rotateTowards:angle];
     }
+    
+    // spin
+    self.zRotation -= SK_DEGREES_TO_RADIANS(self.entity.state.spin);
     
     return self;
 }
@@ -56,7 +63,7 @@
     const float RotationBlendFactor = 0.2f;
     self.angle = angle * RotationBlendFactor + self.angle * (1.0f - RotationBlendFactor);
     
-    self.zRotation = NORMALIZE_ANGLE(self.angle) - SK_DEGREES_TO_RADIANS(self.entity.spin);
+    self.zRotation = NORMALIZE_ANGLE(self.angle); //- SK_DEGREES_TO_RADIANS(self.entity.state.spin);
 }
 
 @end

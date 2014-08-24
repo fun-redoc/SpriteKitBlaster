@@ -10,6 +10,6 @@
 #import "RSGameEntityWithHealthAndSpin.h"
 
 @interface RSPlayerSpriteNode : RSSpriteNode
-@property (nonatomic, strong) RSGameEntityWithHealthAndSpin *entity;
--(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntityWithHealthAndSpin *) entity;;
+@property (nonatomic, strong) RSGameEntity *entity;
+-(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSGameEntity *) entity;;
 @end
