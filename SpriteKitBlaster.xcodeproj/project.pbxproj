@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A5BD1DB19ABB78800A7C1AE /* RSCannonEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5BD1DA19ABB78800A7C1AE /* RSCannonEntity.m */; };
 		2A865B5C19A21F61004A59D7 /* RSGameInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B5B19A21F61004A59D7 /* RSGameInput.m */; };
 		2A865B6319A2225B004A59D7 /* RSGameEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6219A2225B004A59D7 /* RSGameEntity.m */; };
 		2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6519A22A09004A59D7 /* RSSpriteNode.m */; };
 		2A865B6919A34C01004A59D7 /* RSHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B6819A34C01004A59D7 /* RSHealthBar.m */; };
 		2A865B6E19A38B8F004A59D7 /* acknowledgement.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A865B6D19A38B8F004A59D7 /* acknowledgement.txt */; };
 		2A865B7619A3F278004A59D7 /* RSPlayerSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7519A3F278004A59D7 /* RSPlayerSpriteNode.m */; };
-		2A865B7919A3F46B004A59D7 /* RSTurretSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */; };
+		2A865B7919A3F46B004A59D7 /* RSCannonSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7819A3F46B004A59D7 /* RSCannonSpriteNode.m */; };
 		2A865B7C19A3F513004A59D7 /* RSTurretEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */; };
 		2A865B8119A69087004A59D7 /* RSGameEntityWithHealth.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B8019A69087004A59D7 /* RSGameEntityWithHealth.m */; };
 		2A865B8419A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A865B8319A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.m */; };
@@ -51,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A5BD1D919ABB78800A7C1AE /* RSCannonEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCannonEntity.h; sourceTree = "<group>"; };
+		2A5BD1DA19ABB78800A7C1AE /* RSCannonEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCannonEntity.m; sourceTree = "<group>"; };
 		2A865B5A19A21F61004A59D7 /* RSGameInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSGameInput.h; sourceTree = "<group>"; };
 		2A865B5B19A21F61004A59D7 /* RSGameInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSGameInput.m; sourceTree = "<group>"; };
 		2A865B6019A2225B004A59D7 /* globaldefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = globaldefs.h; sourceTree = "<group>"; };
@@ -64,8 +67,8 @@
 		2A865B6F19A3DBBD004A59D7 /* RSUpdateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSUpdateProtocol.h; sourceTree = "<group>"; };
 		2A865B7419A3F278004A59D7 /* RSPlayerSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSPlayerSpriteNode.h; sourceTree = "<group>"; };
 		2A865B7519A3F278004A59D7 /* RSPlayerSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSPlayerSpriteNode.m; sourceTree = "<group>"; };
-		2A865B7719A3F46B004A59D7 /* RSTurretSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTurretSpriteNode.h; sourceTree = "<group>"; };
-		2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTurretSpriteNode.m; sourceTree = "<group>"; };
+		2A865B7719A3F46B004A59D7 /* RSCannonSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSCannonSpriteNode.h; sourceTree = "<group>"; };
+		2A865B7819A3F46B004A59D7 /* RSCannonSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSCannonSpriteNode.m; sourceTree = "<group>"; };
 		2A865B7A19A3F513004A59D7 /* RSTurretEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSTurretEntity.h; sourceTree = "<group>"; };
 		2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSTurretEntity.m; sourceTree = "<group>"; };
 		2A865B7E19A68E39004A59D7 /* RSHealthProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSHealthProtocol.h; sourceTree = "<group>"; };
@@ -136,8 +139,8 @@
 				2A865B6819A34C01004A59D7 /* RSHealthBar.m */,
 				2A865B7419A3F278004A59D7 /* RSPlayerSpriteNode.h */,
 				2A865B7519A3F278004A59D7 /* RSPlayerSpriteNode.m */,
-				2A865B7719A3F46B004A59D7 /* RSTurretSpriteNode.h */,
-				2A865B7819A3F46B004A59D7 /* RSTurretSpriteNode.m */,
+				2A865B7719A3F46B004A59D7 /* RSCannonSpriteNode.h */,
+				2A865B7819A3F46B004A59D7 /* RSCannonSpriteNode.m */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -149,6 +152,8 @@
 				2A865B6219A2225B004A59D7 /* RSGameEntity.m */,
 				2A865B7A19A3F513004A59D7 /* RSTurretEntity.h */,
 				2A865B7B19A3F513004A59D7 /* RSTurretEntity.m */,
+				2A5BD1D919ABB78800A7C1AE /* RSCannonEntity.h */,
+				2A5BD1DA19ABB78800A7C1AE /* RSCannonEntity.m */,
 				2A865B7F19A69087004A59D7 /* RSGameEntityWithHealth.h */,
 				2A865B8019A69087004A59D7 /* RSGameEntityWithHealth.m */,
 				2A865B8219A690CB004A59D7 /* RSGameEntityWithHealthAndSpin.h */,
@@ -373,12 +378,13 @@
 				2A865B5C19A21F61004A59D7 /* RSGameInput.m in Sources */,
 				2A865B7619A3F278004A59D7 /* RSPlayerSpriteNode.m in Sources */,
 				2A96E9D8199E61D500C4B6B3 /* RSViewController.m in Sources */,
+				2A5BD1DB19ABB78800A7C1AE /* RSCannonEntity.m in Sources */,
 				2A96E9DB199E61D500C4B6B3 /* RSMyScene.m in Sources */,
 				2A865B6619A22A09004A59D7 /* RSSpriteNode.m in Sources */,
 				2A865B7C19A3F513004A59D7 /* RSTurretEntity.m in Sources */,
 				2A865B8119A69087004A59D7 /* RSGameEntityWithHealth.m in Sources */,
 				2A865B6919A34C01004A59D7 /* RSHealthBar.m in Sources */,
-				2A865B7919A3F46B004A59D7 /* RSTurretSpriteNode.m in Sources */,
+				2A865B7919A3F46B004A59D7 /* RSCannonSpriteNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

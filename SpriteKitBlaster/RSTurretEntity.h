@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Fun Fun. All rights reserved.
 //
 
-#import "RSGameEntity.h"
+#import "RSGameEntityWithHealth.h"
 
-@interface RSTurretEntity : RSGameEntity
-@property (nonatomic) Vector2d shootVector;
+
+@interface RSTurretEntity : RSGameEntityWithHealth
 @end

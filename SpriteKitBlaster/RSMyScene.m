@@ -13,13 +13,14 @@
 #import "RSGameInput.h"
 #import "RSSpriteNode.h"
 #import "RSPlayerSpriteNode.h"
-#import "RSTurretSpriteNode.h"
+#import "RSCannonSpriteNode.h"
 #import "RSGameEntity.h"
-#import "RSTurretEntity.h"
 #import "RSHealthBar.h"
 #import "RSHealthProtocol.h"
 #import "RSGameEntityWithHealth.h"
 #import "RSGameEntityWithHealthAndSpin.h"
+#import "RSCannonEntity.h"
+#import "RSTurretEntity.h"
 #include "globaldefs.h"
 
 @interface KVCTest : NSObject
@@ -45,8 +46,6 @@
 }
 @end
 
-//const float CannonCollisionRadius = 20.0f;
-//const float PlayerCollisionRadius = 10.0f;
 
 @interface RSGameCollision : NSObject
 @property (nonatomic, strong) RSGameEntity *entity1;
@@ -85,7 +84,7 @@
     
     __block RSGameEntityWithHealth *_playerEntity;
     __block RSTurretEntity *_turretEntity;
-    __block RSGameEntityWithHealth *_cannonEntity;
+    __block RSCannonEntity *_cannonEntity;
     
     __block SKAction *_collisionSoundAction;
     
@@ -166,13 +165,13 @@
                                                                  }
                                                                  entity.state = s;
                                                            }],
-                        _cannonEntity = [[RSGameEntityWithHealth alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
+                        _turretEntity = [[RSTurretEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:NULL],
-                        _turretEntity =[[RSTurretEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
+                        _cannonEntity =[[RSCannonEntity alloc] initWithPosition:CGPointMake(_winSize.width /2, _winSize.height / 2 )
                                                            andUpdateFunction:^(RSGameEntity * me, RSGameInput *intput, NSTimeInterval dt) {
-                                                               RSTurretEntity *turret = (RSTurretEntity *)me;
-                                                               turret.shootVector = CGPointMake(_playerEntity.state.p.x - turret.state.p.x,
-                                                                                                _playerEntity.state.p.y - turret.state.p.y);
+                                                               RSCannonEntity *cannon = (RSCannonEntity *)me;
+                                                               cannon.shootVector = CGPointMake(_playerEntity.state.p.x - cannon.state.p.x,
+                                                                                                _playerEntity.state.p.y - cannon.state.p.y);
                                                            }]
                       ].mutableCopy;
         
@@ -191,7 +190,7 @@
                                               s.v.y = -sinf(angle) * CannonCollisionSpeed;
                                               
                                               _playerEntity.health = MAX(0, _playerEntity.health - 20);
-                                              _cannonEntity.health = MAX(0, _cannonEntity.health - 5);
+                                              _turretEntity.health = MAX(0, _turretEntity.health - 5);
                                               
                                               
                                               
@@ -205,13 +204,13 @@
         
         // init view
         RSPlayerSpriteNode *player;
-        RSSpriteNode *cannon;
-        RSTurretSpriteNode *turret;
+        RSSpriteNode *turret;
+        RSCannonSpriteNode *cannon;
         [self addChild: player = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/Player" andEntity:_playerEntity]];
-        [self addChild: cannon = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon"]];
-        [self addChild: turret = [[RSTurretSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:_turretEntity]];
+        [self addChild: turret = [[RSSpriteNode alloc] initWithImageNamed:@"Art/Images/Cannon"]];
+        [self addChild: cannon = [[RSCannonSpriteNode alloc] initWithImageNamed:@"Art/Images/Turret" andEntity:_cannonEntity]];
         [self addChild:[[RSHealthBar alloc] initEntity:_playerEntity andSprite:player]];
-        [self addChild:[[RSHealthBar alloc] initEntity:_cannonEntity andSprite:cannon]];
+        [self addChild:[[RSHealthBar alloc] initEntity:_turretEntity andSprite:turret]];
         
         cannon.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
         turret.position = CGPointMake(_winSize.width /2, _winSize.height / 2 );
@@ -260,7 +259,7 @@
             float diffLength = sqrtf(diff.x*diff.x + diff.y*diff.y);
             if (diffLength > minSwipeLength) {
                 //
-                [self spawnShootWithVector:diff];
+                [self spawnShootWithVector:diff andShootingEntity:_playerEntity andAims:@[_turretEntity]];
             }
         }
     }
@@ -338,14 +337,23 @@
 
 #pragma mark - game controller logic
 
--(void)spawnShootWithVector:(Vector2d)v {
+-(void)removeCollisionsWithEntity:(RSGameEntity *)entity {
+    for (RSGameCollision *collision in _collisions) {
+        if (collision.entity1 == entity || collision.entity2 == entity ) {
+            [_collisions removeObject:collision];
+        }
+    }
+}
+
+-(void)spawnShootWithVector:(Vector2d)v andShootingEntity:(RSGameEntity *)shootingEntity andAims:(NSArray *)aims {
     __block RSPlayerSpriteNode *shootSprite;
     __block RSGameEntity *shoot;
-    __block RSGameCollision *collision;
+//    __block RSGameCollision *collision;
     
     void (^removeShoot)()  = ^{
         [_entities removeObject:shoot];
-        [_collisions removeObject:collision];
+//        [_collisions removeObject:collision];
+        [self removeCollisionsWithEntity:shoot];
         shootSprite.entity = NULL;
         shoot = NULL;
         _fireEvent = NO;
@@ -359,7 +367,7 @@
         Vector2d uv = unitVector(v);
         Vector2d velocityVector = linearProduct(uv, shootVelocity);
 
-        shoot = [[RSGameEntity alloc] initWithPosition:_playerEntity.state.p andUpdateFunction:^(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt) {
+        shoot = [[RSGameEntity alloc] initWithPosition:shootingEntity.state.p andUpdateFunction:^(RSGameEntity *entity, RSGameInput *input, NSTimeInterval dt) {
             
             // update position
             State s = entity.state;
@@ -375,7 +383,7 @@
         State initialShootState = shoot.state;
         initialShootState.v = velocityVector;
         initialShootState.a = CGPointZero; // flies with constant speed;
-        initialShootState.p = _playerEntity.state.p;
+        initialShootState.p = shootingEntity.state.p;
         shoot.state = initialShootState;
         shootSprite = [[RSPlayerSpriteNode alloc ] initWithImageNamed:@"Art/Images/PlayerMissile" andEntity:shoot];
         
@@ -386,12 +394,16 @@
             [_entities addObject:shoot];
             [self addChild: shootSprite];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                collision = [RSGameCollision entity1:shoot entity2:_turretEntity action:^() {
-                    [shootSprite runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Hit.wav" waitForCompletion:NO]];
-                    _cannonEntity.health = MAX(0, _cannonEntity.health - 10);
-                    removeShoot();
-                }];
-                [_collisions addObject:collision];
+                RSGameCollision *collision;
+                for (RSGameEntityWithHealth *aim in aims) {
+                    collision = [RSGameCollision entity1:shoot entity2:aim action:^() {
+                        [shootSprite runAction:[SKAction playSoundFileNamed:@"Art/Sounds/Hit.wav" waitForCompletion:NO]];
+                        aim.health = MAX(0, aim.health - 10);
+                        removeShoot();
+                    }];
+                    [_collisions addObject:collision];
+
+                }
             });
         });
         
@@ -409,5 +421,8 @@
     return distance <= collisionRadius;    
 }
 
-
+#pragma mark - RSTurretShootProtocol
+-(void)shoot {
+    
+}
 @end

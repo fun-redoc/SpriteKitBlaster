@@ -6,11 +6,10 @@
 //  Copyright (c) 2014 Fun Fun. All rights reserved.
 //
 
-#import "RSTurretSpriteNode.h"
-#import "RSTurretEntity.h"
+#import "RSCannonSpriteNode.h"
 
-@implementation RSTurretSpriteNode
--(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSTurretEntity *)entity {
+@implementation RSCannonSpriteNode
+-(instancetype)initWithImageNamed:(NSString *)imageName andEntity:(RSCannonEntity *)entity {
     if (self = [super initWithImageNamed:imageName]) {
         self.entity = entity;
     }

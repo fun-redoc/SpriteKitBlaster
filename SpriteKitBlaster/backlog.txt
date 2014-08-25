@@ -9,16 +9,17 @@ DONE
 ----
 +F ability to shoot for the player, only once at a time,while the missile is flying no futher shoot is avaliable, shoot on swipe
 
+DOING
+-----
+-F shoot ability for the cannon, shoot after a random time is passed
 
 TODO (not prioritized)
 ----
 -B the sound while shoot, hit or collision are not playing
 -B when HOME is pressed - > crash
 -T totally redesign only using sknode objects, loose framework independency but gain sptitekit functionality like actions, physics and collisions handling, spritenode property userData can be used
--F ability to shoot for the player, only once at a time,while the missile is flying no futher shoot is avaliable, shoot on swipe
 -T consider replacing entities update callback block by a simple delegate
 -F destroy an object (e.g the canon an v.v)
--F shoot ability for the cannon, shoot after a random time is passed
 -F destroy player
 -F scrolling horizontally
 -F obstacles

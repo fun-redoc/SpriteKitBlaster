@@ -9,5 +9,4 @@
 #import "RSTurretEntity.h"
 
 @implementation RSTurretEntity
-
 @end
