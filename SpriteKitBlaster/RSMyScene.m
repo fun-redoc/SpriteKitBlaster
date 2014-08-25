@@ -218,6 +218,8 @@
         _playerEntity.collisionRadius = 1 + (MAX(player.size.height, player.size.width) / 2);
         _cannonEntity.collisionRadius = 1 + (MAX(turret.size.height, turret.size.width) / 2);
         _turretEntity.collisionRadius = 1 + (MAX(turret.size.height, turret.size.width) / 2);
+        
+        _cannonEntity.delegate = self;
 
     }
     return self;
@@ -423,6 +425,6 @@
 
 #pragma mark - RSTurretShootProtocol
 -(void)shoot {
-    
+    [self spawnShootWithVector:_cannonEntity.shootVector andShootingEntity:_cannonEntity andAims:@[_playerEntity]];
 }
 @end
